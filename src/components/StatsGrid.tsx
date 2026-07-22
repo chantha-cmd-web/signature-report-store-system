@@ -73,7 +73,7 @@ export default function StatsGrid({ records }: StatsGridProps) {
                 </span>
                 <Icon className={`w-4 h-4 ${stat.color}`} />
               </div>
-              <div className={`text-2xl font-bold ${stat.color === 'text-slate-700 dark:text-slate-300' ? 'text-slate-900 dark:text-white' : stat.color}`}>
+              <div className={`text-3xl font-bold ${stat.color === 'text-slate-700 dark:text-slate-300' ? 'text-slate-900 dark:text-white' : stat.color}`}>
                 {stat.value}
               </div>
             </div>

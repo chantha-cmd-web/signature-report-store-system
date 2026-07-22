@@ -115,7 +115,7 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
             <TrendingUp className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-extrabold text-slate-800 dark:text-slate-200">
+            <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200">
               Monthly Signature Trend
             </h4>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
@@ -163,7 +163,7 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
             <BarChart3 className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-extrabold text-slate-800 dark:text-slate-200">
+            <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200">
               Department Metrics
             </h4>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
@@ -205,7 +205,7 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
             <PieChartIcon className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-extrabold text-slate-800 dark:text-slate-200">
+            <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200">
               Authorization Ratios
             </h4>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">

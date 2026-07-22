@@ -231,7 +231,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
           <span className="text-[10px] bg-emerald-500 text-white font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
             Secure Submission Log
           </span>
-          <h2 className="text-xl font-black mt-2">
+          <h2 className="text-2xl font-black mt-2">
             Log Document Submission
           </h2>
           <p className="text-xs text-slate-300 mt-1">

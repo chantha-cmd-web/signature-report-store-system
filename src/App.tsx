@@ -860,7 +860,7 @@ export default function App() {
         <div className="p-6 flex items-center gap-3 border-b border-slate-200/10 shrink-0">
           <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center text-white font-extrabold text-lg shadow-sm shadow-emerald-500/20">Σ</div>
           <div className="flex flex-col">
-            <span className="text-white font-black tracking-tight text-sm font-display">SignStore AI</span>
+            <span className="text-white font-black tracking-tight text-lg font-display">SignStore AI</span>
             <span className="text-[9px] text-emerald-400 font-extrabold uppercase tracking-widest">{t.complianceBadge}</span>
           </div>
         </div>
@@ -1039,7 +1039,7 @@ export default function App() {
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl flex flex-col overflow-hidden shadow-xs">
             <div className="p-6 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="font-black text-slate-800 dark:text-slate-100 text-base font-display">{t.ledgerTitle}</h2>
+                <h2 className="font-black text-slate-800 dark:text-slate-100 text-xl font-display">{t.ledgerTitle}</h2>
                 <p className="text-xs text-slate-500 mt-1">{t.ledgerSubtitle}</p>
               </div>
               <button 
@@ -1236,7 +1236,7 @@ export default function App() {
           {/* Header section with description and download/export controls */}
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
             <div>
-              <h2 className="font-black text-slate-800 dark:text-slate-100 text-base font-display">
+              <h2 className="font-black text-slate-800 dark:text-slate-100 text-xl font-display">
                 {language === 'KH' ? 'របាយការណ៍សវនកម្ម & អនុលោមភាព' : 'Audit & Compliance Reports'}
               </h2>
               <p className="text-xs text-slate-500 mt-1">
@@ -1276,8 +1276,8 @@ export default function App() {
                 </div>
               </div>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-slate-800 dark:text-slate-100">{records.length}</span>
-                <span className="text-[10px] font-bold text-slate-400">docs</span>
+                <span className="text-4xl font-black text-slate-800 dark:text-slate-100">{records.length}</span>
+                <span className="text-xs font-bold text-slate-400">docs</span>
               </div>
             </div>
 
@@ -1292,10 +1292,10 @@ export default function App() {
                 </div>
               </div>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                <span className="text-4xl font-black text-emerald-600 dark:text-emerald-400">
                   {records.filter(r => r.signatureStatus === 'Completed' || r.signatureStatus === 'Approved & Signed').length}
                 </span>
-                <span className="text-[10px] font-bold text-slate-400">docs</span>
+                <span className="text-xs font-bold text-slate-400">docs</span>
               </div>
             </div>
 
@@ -1310,10 +1310,10 @@ export default function App() {
                 </div>
               </div>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-amber-600 dark:text-amber-400">
+                <span className="text-4xl font-black text-amber-600 dark:text-amber-400">
                   {records.filter(r => r.signatureStatus !== 'Completed' && r.signatureStatus !== 'Approved & Signed').length}
                 </span>
-                <span className="text-[10px] font-bold text-slate-400">docs</span>
+                <span className="text-xs font-bold text-slate-400">docs</span>
               </div>
             </div>
 
@@ -1333,7 +1333,7 @@ export default function App() {
                   </div>
                   <div className="mt-4">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{rate}%</span>
+                      <span className="text-4xl font-black text-indigo-600 dark:text-indigo-400">{rate}%</span>
                     </div>
                     <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-indigo-500 h-full transition-all duration-500" style={{ width: `${rate}%` }}></div>
@@ -1355,7 +1355,7 @@ export default function App() {
                 <span className="px-2.5 py-1 bg-indigo-500/20 text-indigo-300 text-[9px] font-black uppercase tracking-wider rounded border border-indigo-500/30">
                   Powered by Gemini 3.5 Flash
                 </span>
-                <h3 className="text-sm font-black uppercase tracking-wider mt-2">
+                <h3 className="text-base font-black uppercase tracking-wider mt-2">
                   {language === 'KH' ? 'បង្កើតរបាយការណ៍វិភាគសរុបដោយ AI' : 'AI Executive Audit & Compliance Summary'}
                 </h3>
                 <p className="text-[11px] text-slate-300">
@@ -1533,7 +1533,7 @@ export default function App() {
           {/* Data Management Header */}
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
             <div>
-              <h2 className="font-black text-slate-800 dark:text-slate-100 text-base font-display flex items-center gap-2">
+              <h2 className="font-black text-slate-800 dark:text-slate-100 text-xl font-display flex items-center gap-2">
                 <HardDrive className="w-5 h-5 text-indigo-500" />
                 {t.dmTitle}
               </h2>
@@ -1556,7 +1556,7 @@ export default function App() {
                 </span>
                 <Database className="w-4 h-4 text-slate-400" />
               </div>
-              <div className="mt-3 text-2xl font-black text-slate-800 dark:text-slate-100">{records.length}</div>
+              <div className="mt-3 text-3xl font-black text-slate-800 dark:text-slate-100">{records.length}</div>
             </div>
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 p-5 rounded-2xl shadow-xs">
               <div className="flex items-center justify-between">
@@ -1565,7 +1565,7 @@ export default function App() {
                 </span>
                 <FolderOpen className="w-4 h-4 text-emerald-500" />
               </div>
-              <div className="mt-3 text-2xl font-black text-emerald-600 dark:text-emerald-400">
+              <div className="mt-3 text-3xl font-black text-emerald-600 dark:text-emerald-400">
                 {records.length > 0 ? `${(JSON.stringify(records).length / 1024).toFixed(1)} KB` : '0 KB'}
               </div>
             </div>

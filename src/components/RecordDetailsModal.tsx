@@ -259,7 +259,7 @@ export default function RecordDetailsModal({
                 {record.signatureStatus}
               </span>
             </div>
-            <h2 className="text-lg font-black text-slate-100 mt-2">
+            <h2 className="text-xl font-black text-slate-100 mt-2">
               {record.documentName}
             </h2>
             <p className="text-xs text-slate-400 mt-1">
