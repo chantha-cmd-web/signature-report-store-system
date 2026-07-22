@@ -1,0 +1,6 @@
+{
+  "name": "Signature Report Store System",
+  "description": "AI-Powered Signature Report Store System with Voice Recognition & HTML Report Generator",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
