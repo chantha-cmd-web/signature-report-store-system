@@ -558,9 +558,13 @@ export default function App() {
 
     // Default theme based on local storage or system preference
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
       setIsDarkMode(true);
       document.documentElement.classList.add('dark');
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
