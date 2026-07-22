@@ -15,13 +15,17 @@ import {
   Legend,
 } from 'recharts';
 import { SignatureRecord } from '../types';
-import { TrendingUp, BarChart3, PieChartIcon } from 'lucide-react';
+import { TrendingUp, BarChart3, PieChartIcon, Plus } from 'lucide-react';
 
 interface AnalyticsChartsProps {
   records: SignatureRecord[];
+  ledgerTitle: string;
+  ledgerSubtitle: string;
+  addLogLabel: string;
+  onAddLog: () => void;
 }
 
-export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
+export default function AnalyticsCharts({ records, ledgerTitle, ledgerSubtitle, addLogLabel, onAddLog }: AnalyticsChartsProps) {
   // 1. Process Monthly Trend Data (group by month/year from date, or mock if only a few items)
   // Let's create a realistic monthly count. Since we are in July 2026, let's list Jan - July 2026
   const monthsList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
@@ -107,7 +111,24 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="space-y-6">
+      {/* Shared Ledger Header */}
+      <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="font-black text-slate-800 dark:text-slate-100 text-2xl font-display">{ledgerTitle}</h2>
+          <p className="text-xs text-slate-500 mt-1">{ledgerSubtitle}</p>
+        </div>
+        <button
+          onClick={onAddLog}
+          className="px-4.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all cursor-pointer shadow-md shadow-emerald-500/15 inline-flex items-center gap-1.5"
+        >
+          <Plus className="w-4 h-4" />
+          {addLogLabel}
+        </button>
+      </div>
+
+      {/* Analytics Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Monthly Signature Trend (Area Chart) */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
         <div className="flex items-center gap-2.5 mb-5">
@@ -255,6 +276,7 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

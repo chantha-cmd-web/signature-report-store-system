@@ -1032,25 +1032,17 @@ export default function App() {
               {/* Quick Stats Grid */}
               <StatsGrid records={records} />
 
-          {/* Analytics charts */}
-          <AnalyticsCharts records={records} />
+          {/* Analytics charts + shared Ledger Header */}
+          <AnalyticsCharts
+            records={records}
+            ledgerTitle={t.ledgerTitle}
+            ledgerSubtitle={t.ledgerSubtitle}
+            addLogLabel={t.addLog}
+            onAddLog={() => setShowAddForm(true)}
+          />
 
-          {/* Core Signature Records Ledger panel */}
+          {/* Core Signature Records Ledger panel (filter bar + table only) */}
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl flex flex-col overflow-hidden shadow-xs">
-            <div className="p-6 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h2 className="font-black text-slate-800 dark:text-slate-100 text-2xl font-display">{t.ledgerTitle}</h2>
-                <p className="text-xs text-slate-500 mt-1">{t.ledgerSubtitle}</p>
-              </div>
-              <button 
-                onClick={() => setShowAddForm(true)}
-                className="px-4.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all cursor-pointer shadow-md shadow-emerald-500/15 inline-flex items-center gap-1.5"
-              >
-                <Plus className="w-4 h-4" />
-                {t.addLog}
-              </button>
-            </div>
-
             {/* Filtering parameters bar */}
             <div className="p-4 bg-slate-50 dark:bg-slate-950/30 border-b border-slate-100 dark:border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               
