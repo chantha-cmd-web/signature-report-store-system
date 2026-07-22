@@ -1041,76 +1041,8 @@ export default function App() {
             onAddLog={() => setShowAddForm(true)}
           />
 
-          {/* Core Signature Records Ledger panel (filter bar + table only) */}
+          {/* Core Signature Records Ledger panel */}
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl flex flex-col overflow-hidden shadow-xs">
-            {/* Filtering parameters bar */}
-            <div className="p-4 bg-slate-50 dark:bg-slate-950/30 border-b border-slate-100 dark:border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              
-              {/* Keyword query */}
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-                  <Search className="w-3.5 h-3.5" />
-                </span>
-                <input
-                  type="text"
-                  placeholder={t.searchPlaceholder}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-slate-200"
-                />
-              </div>
-
-              {/* Dept filter */}
-              <div className="flex items-center gap-2 bg-white dark:bg-[#0D1527] px-3 py-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-                <span className="text-xs font-black uppercase text-slate-400 shrink-0">DEPT:</span>
-                <select
-                  value={deptFilter}
-                  onChange={(e) => setDeptFilter(e.target.value)}
-                  className="w-full bg-transparent border-0 text-xs font-extrabold text-slate-700 dark:text-slate-300 focus:ring-0 cursor-pointer outline-none p-0"
-                >
-                  <option value="All">{t.allDepts}</option>
-                  {uniqueDepts.map((d) => (
-                    <option key={d} value={d}>{d}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Doc type filter */}
-              <div className="flex items-center gap-2 bg-white dark:bg-[#0D1527] px-3 py-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-                <span className="text-xs font-black uppercase text-slate-400 shrink-0">CAT:</span>
-                <select
-                  value={docFilter}
-                  onChange={(e) => setDocFilter(e.target.value)}
-                  className="w-full bg-transparent border-0 text-xs font-extrabold text-slate-700 dark:text-slate-300 focus:ring-0 cursor-pointer outline-none p-0"
-                >
-                  <option value="All">{t.allDocs}</option>
-                  {uniqueDocs.map((doc) => (
-                    <option key={doc} value={doc}>{doc}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Status filter */}
-              <div className="flex items-center gap-2 bg-white dark:bg-[#0D1527] px-3 py-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-                <span className="text-xs font-black uppercase text-slate-400 shrink-0">STATUS:</span>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full bg-transparent border-0 text-xs font-extrabold text-slate-700 dark:text-slate-300 focus:ring-0 cursor-pointer outline-none p-0"
-                >
-                  <option value="All">{t.allStatuses}</option>
-                  <option value="Submitted">Submitted</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Need Correction">Need Correction</option>
-                  <option value="Approved & Signed">Approved & Signed</option>
-                  <option value="Returned to Submitter">Returned to Submitter</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Archived">Archived</option>
-                </select>
-              </div>
-
-            </div>
 
             {/* Main Data Table */}
             <div className="flex-1 overflow-x-auto">
