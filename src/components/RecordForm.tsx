@@ -189,7 +189,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
       // Quiet defaults to fully support database schema constraints and metrics charts
       employeeId: 'EMP-' + Math.floor(Math.random() * 9000 + 1000),
-      department: 'Administration',
+      department: 'Operations',
       position: 'Staff Representative',
       documentType: 'General Document',
       referenceNumber: 'REF-' + Math.floor(Math.random() * 900000 + 100000),

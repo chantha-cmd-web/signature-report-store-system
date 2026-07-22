@@ -459,12 +459,15 @@ export default function RecordDetailsModal({
                       <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Department
                       </label>
-                      <input
-                        type="text"
+                      <select
                         value={editDepartment}
                         onChange={(e) => setEditDepartment(e.target.value)}
                         className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
-                      />
+                      >
+                        <option value="Operations">Operations</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Academics">Academics</option>
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">

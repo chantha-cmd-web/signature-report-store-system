@@ -55,7 +55,7 @@ function fallbackParse(transcript: string) {
   }
 
   // 2. Department
-  const depts = ['HR', 'Human Resources', 'Finance', 'Sales', 'Marketing', 'Engineering', 'Operations', 'Legal', 'Administration', 'IT'];
+  const depts = ['Operations', 'Finance', 'Academics'];
   let foundDept = '';
   for (const dept of depts) {
     if (cleanLower.includes(dept.toLowerCase())) {
@@ -154,7 +154,7 @@ If some fields are missing from the text, infer smart defaults where possible.
 Transcript to parse:
 "${transcript}"`,
       config: {
-        systemInstruction: "You are an expert NLP parser that extracts corporate record metadata from voice transcriptions. Ensure employeeId is a numeric string or 'Unknown' if not mentioned. department must be a standard department (e.g. HR, Sales, IT, Finance, Engineering, Operations, Legal, Administration). documentType should be one of: Contract, Report, Request, Approval, Memo, Agreement. priorityLevel must be one of: Normal, Urgent, High.",
+        systemInstruction: "You are an expert NLP parser that extracts corporate record metadata from voice transcriptions. Ensure employeeId is a numeric string or 'Unknown' if not mentioned. department must be one of: Operations, Finance, Academics. documentType should be one of: Contract, Report, Request, Approval, Memo, Agreement. priorityLevel must be one of: Normal, Urgent, High.",
         responseMimeType: 'application/json',
         responseSchema: {
           type: Type.OBJECT,
