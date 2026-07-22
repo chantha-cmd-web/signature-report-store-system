@@ -115,10 +115,10 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
             <TrendingUp className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200">
+            <h4 className="text-lg font-extrabold text-slate-800 dark:text-slate-200">
               Monthly Signature Trend
             </h4>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
+            <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
               Volume Progression 2026
             </p>
           </div>
@@ -133,8 +133,8 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
-              <XAxis dataKey="name" stroke="#94A3B8" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} axisLine={false} />
+              <XAxis dataKey="name" stroke="#94A3B8" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis stroke="#94A3B8" fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#0F172A',
@@ -163,10 +163,10 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
             <BarChart3 className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200">
+            <h4 className="text-lg font-extrabold text-slate-800 dark:text-slate-200">
               Department Metrics
             </h4>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
+            <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
               Records Count comparison
             </p>
           </div>
@@ -175,8 +175,8 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={deptData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
-              <XAxis dataKey="name" stroke="#94A3B8" fontSize={10} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} axisLine={false} />
+              <XAxis dataKey="name" stroke="#94A3B8" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="#94A3B8" fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#0F172A',
@@ -205,10 +205,10 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
             <PieChartIcon className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200">
+            <h4 className="text-lg font-extrabold text-slate-800 dark:text-slate-200">
               Authorization Ratios
             </h4>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
+            <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5 font-bold">
               Current Signature Statuses
             </p>
           </div>
@@ -246,7 +246,7 @@ export default function AnalyticsCharts({ records }: AnalyticsChartsProps) {
                   height={36}
                   iconType="circle"
                   iconSize={8}
-                  wrapperStyle={{ fontSize: '11px', fontWeight: 'bold' }}
+                  wrapperStyle={{ fontSize: '12px', fontWeight: 'bold' }}
                 />
               </PieChart>
             </ResponsiveContainer>

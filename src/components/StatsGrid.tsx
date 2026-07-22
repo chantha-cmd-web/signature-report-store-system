@@ -11,7 +11,6 @@ export default function StatsGrid({ records }: StatsGridProps) {
   const pending = records.filter((r) => r.signatureStatus === 'Submitted' || r.signatureStatus === 'Under Review' || r.signatureStatus === 'Need Correction').length;
   const completed = records.filter((r) => r.signatureStatus === 'Completed' || r.signatureStatus === 'Approved & Signed').length;
   
-  // Calculate a mock accuracy that is slightly dynamic based on record volume
   const accuracy = total > 0 ? (98.4 - (records.filter(r => r.signatureStatus === 'Rejected').length * 0.2)).toFixed(1) : '98.4';
 
   const stats = [
@@ -64,20 +63,20 @@ export default function StatsGrid({ records }: StatsGridProps) {
         return (
           <div
             key={idx}
-            className={`p-5 border ${stat.border} ${stat.bg} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between`}
+            className={`p-6 border ${stat.border} ${stat.bg} rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between`}
           >
             <div>
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">
                   {stat.title}
                 </span>
-                <Icon className={`w-4 h-4 ${stat.color}`} />
+                <Icon className={`w-5 h-5 ${stat.color}`} />
               </div>
-              <div className={`text-3xl font-bold ${stat.color === 'text-slate-700 dark:text-slate-300' ? 'text-slate-900 dark:text-white' : stat.color}`}>
+              <div className={`text-4xl font-extrabold ${stat.color === 'text-slate-700 dark:text-slate-300' ? 'text-slate-900 dark:text-white' : stat.color}`}>
                 {stat.value}
               </div>
             </div>
-            <div className={`mt-2 text-xs font-medium ${stat.descColor}`}>
+            <div className={`mt-3 text-sm font-medium ${stat.descColor}`}>
               {stat.desc}
             </div>
           </div>

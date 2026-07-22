@@ -222,19 +222,19 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
           <div className="absolute right-6 top-6">
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors cursor-pointer text-xs font-bold w-8 h-8 flex items-center justify-center"
+              className="text-slate-400 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors cursor-pointer text-sm font-bold w-9 h-9 flex items-center justify-center"
             >
               ✕
             </button>
           </div>
           
-          <span className="text-[10px] bg-emerald-500 text-white font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
+          <span className="text-xs bg-emerald-500 text-white font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
             Secure Submission Log
           </span>
-          <h2 className="text-2xl font-black mt-2">
+          <h2 className="text-3xl font-black mt-2">
             Log Document Submission
           </h2>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-sm text-slate-300 mt-1">
             Track documents submitted for signature. Supports voice-activated title inputting.
           </p>
         </div>
@@ -246,7 +246,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-3">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <label className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <label className="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
                   Document Title / Name *
                 </label>
               </div>
@@ -264,7 +264,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                         setIsListening(false);
                       }
                     }}
-                    className={`px-2 py-1 text-[10px] font-bold rounded flex items-center gap-1 cursor-pointer transition-all ${
+                    className={`px-2 py-1 text-xs font-bold rounded flex items-center gap-1 cursor-pointer transition-all ${
                       voiceLang === 'en-US'
                         ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-xs'
                         : 'text-slate-500 hover:text-slate-800'
@@ -283,7 +283,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                         setIsListening(false);
                       }
                     }}
-                    className={`px-2 py-1 text-[10px] font-bold rounded flex items-center gap-1 cursor-pointer transition-all ${
+                    className={`px-2 py-1 text-xs font-bold rounded flex items-center gap-1 cursor-pointer transition-all ${
                       voiceLang === 'km-KH'
                         ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-xs'
                         : 'text-slate-500 hover:text-slate-800'
@@ -299,7 +299,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                 <button
                   type="button"
                   onClick={toggleVoiceListening}
-                  className={`px-3 py-1.5 text-[11px] font-black rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+                  className={`px-3 py-1.5 text-xs font-black rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
                     isListening
                       ? 'bg-rose-500 hover:bg-rose-600 text-white animate-pulse'
                       : 'bg-emerald-600 hover:bg-emerald-700 text-white'
@@ -328,7 +328,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                     <div className="w-0.5 bg-rose-500 animate-pulse h-4 [animation-delay:-0.2s]"></div>
                     <div className="w-0.5 bg-rose-500 animate-pulse h-2 [animation-delay:-0.4s]"></div>
                   </div>
-                  <span className="text-[9px] text-rose-500 font-bold uppercase tracking-wider animate-pulse">Live</span>
+                  <span className="text-xs text-rose-500 font-bold uppercase tracking-wider animate-pulse">Live</span>
                 </div>
               )}
             </div>
@@ -347,7 +347,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                   <span className="font-bold text-slate-800 dark:text-slate-200 block">
                     {voiceLang === 'km-KH' ? 'កំពុងថតសំឡេងជាភាសាខ្មែរ' : 'Capturing Spoken Voice (English)'}
                   </span>
-                  <span className="text-slate-500 text-[11px] block mt-0.5">
+                  <span className="text-slate-500 text-xs block mt-0.5">
                     {voiceLang === 'km-KH' 
                       ? 'និយាយលិខិត ឬឯកសាររបស់អ្នក។ ចុចប៊ូតុង "✨ បង្កើតស្វ័យប្រវត្ត" ខាងក្រោមដើម្បីកែសម្រួលវាជាចំណងជើងផ្លូវការ។'
                       : 'Speak your document request. Click the "✨ AI Auto-Generate" below to auto-format into a professional corporate document title.'}
@@ -358,7 +358,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
             {/* AI Action Row */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-              <div className="text-[11px] text-slate-400 font-bold flex items-center gap-1">
+              <div className="text-xs text-slate-400 font-bold flex items-center gap-1">
                 <Globe className="w-3.5 h-3.5 text-slate-400" />
                 <span>Engine: Web Speech API ({voiceLang})</span>
               </div>
@@ -368,7 +368,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                   type="button"
                   onClick={handleAiPolish}
                   disabled={isPolishing}
-                  className={`px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/40 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50 rounded-lg text-[11px] font-black flex items-center gap-1.5 cursor-pointer transition-all ${
+                  className={`px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/40 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50 rounded-lg text-xs font-black flex items-center gap-1.5 cursor-pointer transition-all ${
                     isPolishing ? 'opacity-70 cursor-not-allowed animate-pulse' : ''
                   }`}
                 >
@@ -386,12 +386,12 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
             {/* AI Polish Success Label */}
             {polishMethod && (
-              <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold px-3 py-2 rounded-xl flex items-center justify-between gap-2 animate-fadeIn">
+              <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold px-3 py-2 rounded-xl flex items-center justify-between gap-2 animate-fadeIn">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Polished Name Auto-Generated!</span>
                 </div>
-                <span className="text-[9px] bg-emerald-500/20 dark:bg-emerald-500/30 px-1.5 py-0.5 rounded uppercase tracking-wider font-extrabold font-mono text-emerald-700 dark:text-emerald-300">
+                <span className="text-xs bg-emerald-500/20 dark:bg-emerald-500/30 px-1.5 py-0.5 rounded uppercase tracking-wider font-extrabold font-mono text-emerald-700 dark:text-emerald-300">
                   {polishMethod}
                 </span>
               </div>
@@ -401,7 +401,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Submitted By (Full Name) */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Submitted By (Full Name) *
               </label>
               <input
@@ -416,7 +416,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
             {/* Date of Submission */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Date of Submission *
               </label>
               <input
@@ -431,7 +431,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
           {/* Signature Status Selection */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Signature Status *
             </label>
             <div className="flex gap-4">
@@ -455,7 +455,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
                       onChange={() => setSignatureStatusOption(option)}
                       className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950"
                     />
-                    <span className={`text-xs font-black uppercase tracking-wider ${isSelected ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500'}`}>
+                    <span className={`text-sm font-black uppercase tracking-wider ${isSelected ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500'}`}>
                       {option}
                     </span>
                   </label>
@@ -466,7 +466,7 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
           {/* Remarks textarea */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Remarks
             </label>
             <textarea
@@ -480,14 +480,14 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
 
           {/* Status Notifications */}
           {errorMessage && (
-            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/30 text-rose-800 dark:text-rose-300 text-xs p-3.5 rounded-xl flex items-center gap-2">
+            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/30 text-rose-800 dark:text-rose-300 text-sm p-3.5 rounded-xl flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}
 
           {successNotice && (
-            <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-300 text-xs p-3.5 rounded-xl flex items-center gap-2">
+            <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/30 text-emerald-800 dark:text-emerald-300 text-sm p-3.5 rounded-xl flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
               <span>{successNotice}</span>
             </div>
@@ -498,13 +498,13 @@ export default function RecordForm({ onAddRecord, onClose, currentUserName, lang
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+              className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
               <Send className="w-4 h-4" />
               Save Document Record

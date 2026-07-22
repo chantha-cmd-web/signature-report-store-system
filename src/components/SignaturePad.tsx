@@ -148,12 +148,12 @@ export default function SignaturePad({ onCapture, initialValue = null }: Signatu
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-3">
-        <label className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+        <label className="text-base font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
           <Pencil className="w-4 h-4 text-emerald-600" />
           Digital Authorization Signature
         </label>
         
-        <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg text-xs font-semibold">
+        <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg text-sm font-semibold">
           <button
             type="button"
             onClick={() => setMode('draw')}
@@ -198,7 +198,7 @@ export default function SignaturePad({ onCapture, initialValue = null }: Signatu
           {/* Guidelines */}
           <div className="absolute bottom-6 left-0 right-0 pointer-events-none flex flex-col items-center">
             <div className="w-[85%] border-b border-slate-300/80 dark:border-slate-700/80 border-dashed" />
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-600 mt-2">
+            <span className="text-xs uppercase font-bold tracking-widest text-slate-400 dark:text-slate-600 mt-2">
               Sign Above This Line
             </span>
           </div>
@@ -223,7 +223,7 @@ export default function SignaturePad({ onCapture, initialValue = null }: Signatu
             <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-700 mx-1" />
 
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-slate-500 font-bold uppercase">Weight:</span>
+              <span className="text-xs text-slate-500 font-bold uppercase">Weight:</span>
               <select
                 value={lineWidth}
                 onChange={(e) => setLineWidth(Number(e.target.value))}
@@ -241,7 +241,7 @@ export default function SignaturePad({ onCapture, initialValue = null }: Signatu
             <button
               type="button"
               onClick={clearCanvas}
-              className="absolute bottom-2 right-2 flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200/50 dark:border-rose-900/50 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+              className="absolute bottom-2 right-2 flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200/50 dark:border-rose-900/50 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Clear Ink
@@ -260,7 +260,7 @@ export default function SignaturePad({ onCapture, initialValue = null }: Signatu
               <button
                 type="button"
                 onClick={clearCanvas}
-                className="mt-3 flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200/50 dark:border-rose-900/50 px-2.5 py-1.5 rounded-lg transition-colors"
+                className="mt-3 flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200/50 dark:border-rose-900/50 px-2.5 py-1.5 rounded-lg transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 Remove Image
@@ -271,10 +271,10 @@ export default function SignaturePad({ onCapture, initialValue = null }: Signatu
               <div className="p-4 bg-emerald-50 dark:bg-emerald-950/50 rounded-full text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform mb-3">
                 <Upload className="w-6 h-6" />
               </div>
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <span className="text-base font-semibold text-slate-700 dark:text-slate-300">
                 Click to upload your digital signature
               </span>
-              <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <span className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                 PNG, JPG, or SVG up to 5MB (Transparent backgrounds look best)
               </span>
               <input

@@ -254,15 +254,15 @@ export default function RecordDetailsModal({
               <span className="font-mono text-xs text-emerald-400 font-extrabold tracking-widest uppercase bg-emerald-950/80 border border-emerald-900/60 px-2 py-0.5 rounded">
                 {record.id}
               </span>
-              <span className={`text-[11px] font-black px-2.5 py-0.5 rounded-full border ${currentStatus.text} ${currentStatus.bg} ${currentStatus.border} flex items-center gap-1`}>
+              <span className={`text-xs font-black px-2.5 py-0.5 rounded-full border ${currentStatus.text} ${currentStatus.bg} ${currentStatus.border} flex items-center gap-1`}>
                 <StatusIcon className="w-3.5 h-3.5" />
                 {record.signatureStatus}
               </span>
             </div>
-            <h2 className="text-xl font-black text-slate-100 mt-2">
+            <h2 className="text-2xl font-black text-slate-100 mt-2">
               {record.documentName}
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-sm text-slate-400 mt-1">
               Submitted by <strong className="text-slate-200">{record.fullName}</strong> ({record.position}) • Received: {record.signatureDate} @ {record.signatureTime}
             </p>
           </div>
@@ -280,7 +280,7 @@ export default function RecordDetailsModal({
           
           {/* Top Quick Actions Panel */}
           <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/50 p-4 rounded-2xl flex flex-wrap gap-2 justify-between items-center">
-            <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+            <span className="text-sm font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
               Verify & Export Report
             </span>
 
@@ -326,7 +326,7 @@ export default function RecordDetailsModal({
                   placeholder="e.g. director@corporation.com"
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  className="flex-1 px-3 py-1.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800 dark:text-slate-200"
+                  className="flex-1 px-3 py-1.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold focus:ring-1 focus:ring-emerald-500 outline-none text-slate-800 dark:text-slate-200"
                 />
                 <button
                   type="submit"
@@ -336,7 +336,7 @@ export default function RecordDetailsModal({
                 </button>
               </div>
               {emailSentNotice && (
-                <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold block animate-pulse">
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold block animate-pulse">
                   ✓ Document signature compliance verification report dispatched securely to {emailInput}!
                 </span>
               )}
@@ -348,7 +348,7 @@ export default function RecordDetailsModal({
             <div className="bg-slate-50 dark:bg-slate-950/80 border border-indigo-200/50 dark:border-indigo-900/30 p-4 rounded-2xl flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shrink-0"></span>
-                <span className="text-xs font-extrabold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest">
+<span className="text-xs font-extrabold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest">
                   Executive Administrative Controls
                 </span>
               </div>
@@ -357,7 +357,7 @@ export default function RecordDetailsModal({
                 <button
                   type="button"
                   onClick={() => setIsEditing(!isEditing)}
-                  className="flex items-center justify-center gap-2 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-black rounded-xl cursor-pointer transition-all shadow-xs flex-1 sm:flex-initial"
+                  className="flex items-center justify-center gap-2 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-xs flex-1 sm:flex-initial"
                 >
                   {isEditing ? <RotateCcw className="w-3.5 h-3.5" /> : <Edit className="w-3.5 h-3.5" />}
                   {isEditing ? 'Cancel Edit' : 'Edit Information'}
@@ -366,7 +366,7 @@ export default function RecordDetailsModal({
                 <button
                   type="button"
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="flex items-center justify-center gap-2 px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-black rounded-xl cursor-pointer transition-all shadow-xs flex-1 sm:flex-initial"
+                  className="flex items-center justify-center gap-2 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-xs flex-1 sm:flex-initial"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Delete Entry
@@ -381,10 +381,10 @@ export default function RecordDetailsModal({
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-black text-rose-800 dark:text-rose-400 uppercase tracking-wider">
+                  <h4 className="text-sm font-black text-rose-800 dark:text-rose-400 uppercase tracking-wider">
                     CRITICAL: Confirm Permanent Record Deletion
                   </h4>
-                  <p className="text-[11px] text-rose-600 dark:text-rose-300 font-semibold mt-1">
+                  <p className="text-xs text-rose-600 dark:text-rose-300 font-semibold mt-1">
                     Are you absolutely certain you want to delete this signature compliance record (<strong>{record.id}</strong>)? 
                     This will permanently expunge this record, the original uploaded document, cryptographic signatures, 
                     voice proof, and all audit trails. <strong>This action cannot be undone.</strong>
@@ -417,19 +417,19 @@ export default function RecordDetailsModal({
                   <Edit className="w-4 h-4" />
                   Edit Report Information Form
                 </span>
-                <span className="text-[9px] text-slate-400 font-extrabold tracking-wider">FIELDS MARKED WITH * ARE REQUIRED</span>
+                <span className="text-xs text-slate-400 font-extrabold tracking-wider">FIELDS MARKED WITH * ARE REQUIRED</span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 
                 {/* Left side: Submitter Information */}
                 <div className="space-y-3.5">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-1">
+                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-1">
                     Submitter & Identification
                   </h4>
                   
                   <div>
-                    <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                    <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                       Submitted By *
                     </label>
                     <input
@@ -437,12 +437,12 @@ export default function RecordDetailsModal({
                       required
                       value={editFullName}
                       onChange={(e) => setEditFullName(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200 animate-fadeIn"
+                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200 animate-fadeIn"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                    <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                       Submitter Employee ID *
                     </label>
                     <input
@@ -450,31 +450,31 @@ export default function RecordDetailsModal({
                       required
                       value={editEmployeeId}
                       onChange={(e) => setEditEmployeeId(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                      <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Department
                       </label>
                       <input
                         type="text"
                         value={editDepartment}
                         onChange={(e) => setEditDepartment(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                      <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Job Position
                       </label>
                       <input
                         type="text"
                         value={editPosition}
                         onChange={(e) => setEditPosition(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                       />
                     </div>
                   </div>
@@ -482,12 +482,12 @@ export default function RecordDetailsModal({
 
                 {/* Right side: Document Information */}
                 <div className="space-y-3.5">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-1">
+                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-1">
                     Document Details
                   </h4>
 
                   <div>
-                    <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                    <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                       Document Title / Name *
                     </label>
                     <input
@@ -495,19 +495,19 @@ export default function RecordDetailsModal({
                       required
                       value={editDocName}
                       onChange={(e) => setEditDocName(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                      <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Document Type
                       </label>
                       <select
                         value={editDocType}
                         onChange={(e) => setEditDocType(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                       >
                         <option value="Agreement">Agreement</option>
                         <option value="Contract">Contract</option>
@@ -520,13 +520,13 @@ export default function RecordDetailsModal({
                       </select>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                      <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Priority Level
                       </label>
                       <select
                         value={editPriorityLevel}
                         onChange={(e) => setEditPriorityLevel(e.target.value as any)}
-                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                       >
                         <option value="Normal">Normal</option>
                         <option value="High">High</option>
@@ -537,25 +537,25 @@ export default function RecordDetailsModal({
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                      <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Reference Number
                       </label>
                       <input
                         type="text"
                         value={editRefNumber}
                         onChange={(e) => setEditRefNumber(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                      <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                         Submission Purpose
                       </label>
                       <input
                         type="text"
                         value={editPurpose}
                         onChange={(e) => setEditPurpose(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                       />
                     </div>
                   </div>
@@ -564,14 +564,14 @@ export default function RecordDetailsModal({
               </div>
 
               <div>
-                <label className="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
+                <label className="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-1">
                   Remarks / Description Details
                 </label>
                 <textarea
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
                   rows={2.5}
-                  className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-1 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-200"
                   placeholder="Describe details regarding this submission..."
                 />
               </div>
@@ -607,7 +607,7 @@ export default function RecordDetailsModal({
                 
                 {/* Left Box: Submitter Details */}
                 <div className="bg-slate-50/50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800 p-5 rounded-2xl space-y-4">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 border-b border-slate-200/40 dark:border-slate-800/40 pb-2 flex items-center gap-1.5">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-slate-500 border-b border-slate-200/40 dark:border-slate-800/40 pb-2 flex items-center gap-1.5">
                     <User className="w-4 h-4 text-slate-400" />
                     Submitter Information
                   </h3>
@@ -634,7 +634,7 @@ export default function RecordDetailsModal({
 
                 {/* Right Box: Document Scope */}
                 <div className="bg-slate-50/50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800 p-5 rounded-2xl space-y-4">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 border-b border-slate-200/40 dark:border-slate-800/40 pb-2 flex items-center gap-1.5">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-slate-500 border-b border-slate-200/40 dark:border-slate-800/40 pb-2 flex items-center gap-1.5">
                     <FileText className="w-4 h-4 text-slate-400" />
                     Document Metadata
                   </h3>
@@ -656,7 +656,7 @@ export default function RecordDetailsModal({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-500 font-medium">Priority Level:</span>
-                      <strong className={`font-extrabold uppercase px-1.5 py-0.5 rounded text-[10px] ${
+                      <strong className={`font-extrabold uppercase px-1.5 py-0.5 rounded text-xs ${
                         record.priorityLevel === 'Urgent' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400' :
                         record.priorityLevel === 'High' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400' :
                         'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
@@ -672,7 +672,7 @@ export default function RecordDetailsModal({
               {/* Description Block */}
               {record.description && (
                 <div className="border border-slate-100 dark:border-slate-800 p-5 rounded-2xl">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-slate-500 mb-2">
                     Executive Remarks / Purpose Details
                   </h3>
                   <p className="text-xs text-slate-700 dark:text-slate-300 font-semibold leading-relaxed">
@@ -699,7 +699,7 @@ export default function RecordDetailsModal({
                     <p className="text-xs font-black text-slate-800 dark:text-slate-200 truncate max-w-xs md:max-w-md">
                       {record.originalAttachmentName}
                     </p>
-                    <p className="text-[10px] text-slate-400 font-bold">
+                    <p className="text-xs text-slate-400 font-bold">
                       {record.originalAttachmentSize || 'Unknown Size'} • {record.originalAttachmentType || 'Document'}
                     </p>
                   </div>
@@ -745,10 +745,10 @@ export default function RecordDetailsModal({
               )}
 
               <div className="text-center sm:text-right space-y-1.5">
-                <span className="text-[10px] uppercase font-extrabold bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 px-2 py-0.5 rounded border border-violet-200 dark:border-violet-900/40">
+                <span className="text-xs uppercase font-extrabold bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 px-2 py-0.5 rounded border border-violet-200 dark:border-violet-900/40">
                   Secure Compliance Verified
                 </span>
-                <p className="text-[10px] font-mono text-slate-500 mt-1 leading-tight">
+                <p className="text-xs font-mono text-slate-500 mt-1 leading-tight">
                   Verification Code:<br />
                   SEC-HASH-{record.id}
                 </p>
@@ -769,7 +769,7 @@ export default function RecordDetailsModal({
                     <Volume2 className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
                     Spoken Voice Transcript
                   </span>
-                  <span className="text-[10px] text-slate-400">Captured at submission</span>
+                  <span className="text-xs text-slate-400">Captured at submission</span>
                 </div>
                 
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-relaxed italic">
@@ -781,7 +781,7 @@ export default function RecordDetailsModal({
                     <audio src={record.voiceRecord} controls className="w-full h-8 outline-none" />
                   </div>
                 ) : (
-                  <p className="text-[10px] text-slate-400 dark:text-slate-500 italic mt-1">
+                  <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-1">
                     (Audio log recorded securely as transaction proof)
                   </p>
                 )}
@@ -795,7 +795,7 @@ export default function RecordDetailsModal({
               Signature Action Record (Final Decision)
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-semibold">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-semibold">
               <div className="space-y-1">
                 <span className="text-slate-500 block">Signed / Actions Logged By:</span>
                 <p className="text-slate-800 dark:text-slate-200 font-bold text-sm flex items-center gap-1.5">
@@ -841,7 +841,7 @@ export default function RecordDetailsModal({
                 </div>
               ) : (
                 <div className="p-3 bg-white/40 dark:bg-slate-900/10 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-center">
-                  <p className="text-[11px] text-slate-400 italic">No final signed document file uploaded yet. Managers can attach files below.</p>
+                  <p className="text-xs text-slate-400 italic">No final signed document file uploaded yet. Managers can attach files below.</p>
                 </div>
               )}
             </div>
@@ -849,16 +849,16 @@ export default function RecordDetailsModal({
 
           {/* Audit Trail List (Document Status Timeline) */}
           <div className="space-y-4 pt-2">
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-500 pb-2 border-b border-slate-200/50 dark:border-slate-800/50 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-slate-400" />
               Document Status Timeline & Audit Trail
-            </h3>
+            </span>
 
             <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-black text-slate-500 tracking-wider">
+                    <tr className="bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 text-xs uppercase font-black text-slate-500 tracking-wider">
                       <th className="p-3">Timestamp</th>
                       <th className="p-3">User Initiator</th>
                       <th className="p-3">Action Logged</th>
@@ -877,18 +877,18 @@ export default function RecordDetailsModal({
                         <td className="p-3 text-slate-700 dark:text-slate-300 font-semibold">{log.action}</td>
                         <td className="p-3 font-mono">
                           {log.previousStatus && log.newStatus ? (
-                            <span className="flex items-center gap-1 text-[10px] font-bold">
+                            <span className="flex items-center gap-1 text-xs font-bold">
                               <span className="text-slate-400">{log.previousStatus}</span>
                               <ArrowRight className="w-3 h-3 text-slate-400 shrink-0" />
                               <span className="text-emerald-500">{log.newStatus}</span>
                             </span>
                           ) : (
-                            <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded font-black">
+                            <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded font-black">
                               INIT
                             </span>
                           )}
                         </td>
-                        <td className="p-3 text-[10px] font-mono text-slate-500 max-w-xs truncate">{log.deviceInfo}</td>
+                        <td className="p-3 text-xs font-mono text-slate-500 max-w-xs truncate">{log.deviceInfo}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -903,7 +903,7 @@ export default function RecordDetailsModal({
               <button
                 type="button"
                 onClick={() => setShowApprovalPanel(!showApprovalPanel)}
-                className="w-full px-5 py-3 bg-indigo-50 dark:bg-indigo-950/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 rounded-2xl text-xs font-extrabold flex items-center justify-between shadow-xs cursor-pointer transition-all border border-indigo-100 dark:border-indigo-900/30"
+                className="w-full px-5 py-3 bg-indigo-50 dark:bg-indigo-950/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 rounded-2xl text-sm font-extrabold flex items-center justify-between shadow-xs cursor-pointer transition-all border border-indigo-100 dark:border-indigo-900/30"
               >
                 <span className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4" />
@@ -918,13 +918,13 @@ export default function RecordDetailsModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Status selection */}
                     <div>
-                      <label className="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Update Document Workflow Status *
                       </label>
                       <select
                         value={selectedStatus}
                         onChange={(e) => setSelectedStatus(e.target.value as DocumentStatus)}
-                        className="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-800 dark:text-slate-200"
+                        className="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-800 dark:text-slate-200"
                       >
                         {(Object.keys(statusConfig) as DocumentStatus[]).map((status) => (
                           <option key={status} value={status}>{status}</option>
@@ -934,7 +934,7 @@ export default function RecordDetailsModal({
 
                     {/* Signed By */}
                     <div>
-                      <label className="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                      <label className="block text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                         Signed By (Manager/Director Full Name) *
                       </label>
                       <input
@@ -943,7 +943,7 @@ export default function RecordDetailsModal({
                         value={signedBy}
                         onChange={(e) => setSignedBy(e.target.value)}
                         placeholder="e.g. Director Sophia"
-                        className="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-800 dark:text-slate-200"
+                        className="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-800 dark:text-slate-200"
                       />
                     </div>
                   </div>
@@ -958,7 +958,7 @@ export default function RecordDetailsModal({
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Comment on identity verification or reason for requesting changes/rejection..."
                       rows={2.5}
-                      className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-800 dark:text-slate-200"
+                      className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-800 dark:text-slate-200"
                     />
                   </div>
 
@@ -980,7 +980,7 @@ export default function RecordDetailsModal({
                             setSignedAttachmentName(null);
                             setSignedAttachmentData(null);
                           }}
-                          className="text-[10px] text-rose-500 hover:underline font-bold"
+                          className="text-xs text-rose-500 hover:underline font-bold"
                         >
                           Remove
                         </button>
@@ -1011,7 +1011,7 @@ export default function RecordDetailsModal({
                           }}
                         />
                         <label htmlFor="signed-file-upload" className="cursor-pointer">
-                          <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 block">
+                          <span className="text-xs font-bold text-slate-600 dark:text-slate-300 block">
                             Drag & Drop executed signed document here, or <span className="text-emerald-500 underline">Browse</span>
                           </span>
                         </label>

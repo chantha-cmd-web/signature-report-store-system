@@ -384,14 +384,14 @@ const renderMarkdown = (text: string) => {
     // Check for headings
     if (content.startsWith('### ')) {
       return (
-        <h4 key={idx} className="text-xs font-black text-slate-800 dark:text-slate-100 mt-4 mb-2 uppercase tracking-wider font-display">
+        <h4 key={idx} className="text-sm font-black text-slate-800 dark:text-slate-100 mt-4 mb-2 uppercase tracking-wider font-display">
           {content.replace('### ', '')}
         </h4>
       );
     }
     if (content.startsWith('## ')) {
       return (
-        <h3 key={idx} className="text-sm font-black text-slate-950 dark:text-white mt-5 mb-2.5 font-display border-b border-slate-100 dark:border-slate-800 pb-1">
+        <h3 key={idx} className="text-base font-black text-slate-950 dark:text-white mt-5 mb-2.5 font-display border-b border-slate-100 dark:border-slate-800 pb-1">
           {content.replace('## ', '')}
         </h3>
       );
@@ -860,14 +860,14 @@ export default function App() {
         <div className="p-6 flex items-center gap-3 border-b border-slate-200/10 shrink-0">
           <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center text-white font-extrabold text-lg shadow-sm shadow-emerald-500/20">Σ</div>
           <div className="flex flex-col">
-            <span className="text-white font-black tracking-tight text-lg font-display">SignStore AI</span>
-            <span className="text-[9px] text-emerald-400 font-extrabold uppercase tracking-widest">{t.complianceBadge}</span>
+            <span className="text-white font-black tracking-tight text-xl font-display">SignStore AI</span>
+            <span className="text-xs text-emerald-400 font-extrabold uppercase tracking-widest">{t.complianceBadge}</span>
           </div>
         </div>
         
         <div className="flex-1 py-6 overflow-y-auto space-y-6">
           <div>
-            <div className="px-6 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t.mainMenu}</div>
+            <div className="px-6 mb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">{t.mainMenu}</div>
             <button
               onClick={() => {
                 setActiveView('dashboard');
@@ -877,7 +877,7 @@ export default function App() {
                 setStatusFilter('All');
                 setIsMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-6 py-3.5 border-l-4 font-bold text-xs text-left cursor-pointer transition-all ${
+              className={`w-full flex items-center gap-3 px-6 py-4 border-l-4 font-bold text-sm text-left cursor-pointer transition-all ${
                 activeView === 'dashboard'
                   ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500 font-extrabold'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/30 border-transparent'
@@ -888,7 +888,7 @@ export default function App() {
             </button>
             <button
               onClick={() => { setActiveView('reports'); setIsMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-3 px-6 py-3.5 border-l-4 font-bold text-xs text-left cursor-pointer transition-all ${
+              className={`w-full flex items-center gap-3 px-6 py-4 border-l-4 font-bold text-sm text-left cursor-pointer transition-all ${
                 activeView === 'reports'
                   ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500 font-extrabold'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/30 border-transparent'
@@ -899,7 +899,7 @@ export default function App() {
             </button>
             <button
               onClick={() => { setActiveView('dataManagement'); setIsMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-3 px-6 py-3.5 border-l-4 font-bold text-xs text-left cursor-pointer transition-all ${
+              className={`w-full flex items-center gap-3 px-6 py-4 border-l-4 font-bold text-sm text-left cursor-pointer transition-all ${
                 activeView === 'dataManagement'
                   ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500 font-extrabold'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/30 border-transparent'
@@ -910,7 +910,7 @@ export default function App() {
             </button>
             <button
               onClick={() => { setShowAddForm(true); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center gap-3 px-6 py-3.5 text-slate-400 hover:text-white transition-all text-left text-xs font-bold cursor-pointer hover:bg-slate-800/30"
+              className="w-full flex items-center gap-3 px-6 py-4 text-slate-400 hover:text-white transition-all text-left text-sm font-bold cursor-pointer hover:bg-slate-800/30"
             >
               <Plus className="w-4.5 h-4.5" />
               {t.addLog}
@@ -919,7 +919,7 @@ export default function App() {
         </div>
 
         <div className="p-6 border-t border-slate-200/10 shrink-0 bg-[#070A13]">
-          <div className="flex items-center gap-2 text-slate-400 text-[10px] font-extrabold uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-slate-400 text-xs font-extrabold uppercase tracking-widest">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             {t.complianceBadge}
           </div>
@@ -961,7 +961,7 @@ export default function App() {
             <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-lg p-0.5">
               <button
                 onClick={() => setLanguage('EN')}
-                className={`px-2 py-1 text-[10px] font-extrabold rounded cursor-pointer transition-all ${
+                className={`px-2 py-1 text-xs font-extrabold rounded cursor-pointer transition-all ${
                   language === 'EN'
                     ? 'bg-white dark:bg-[#0D1527] text-emerald-600 dark:text-emerald-400 shadow-xs'
                     : 'text-slate-500 hover:text-slate-800'
@@ -971,7 +971,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setLanguage('KH')}
-                className={`px-2 py-1 text-[10px] font-extrabold rounded cursor-pointer transition-all ${
+                className={`px-2 py-1 text-xs font-extrabold rounded cursor-pointer transition-all ${
                   language === 'KH'
                     ? 'bg-white dark:bg-[#0D1527] text-emerald-600 dark:text-emerald-400 shadow-xs'
                     : 'text-slate-500 hover:text-slate-800'
@@ -995,7 +995,7 @@ export default function App() {
             {/* Restore seeds option */}
             <button
               onClick={handleResetDatabase}
-              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-[10px] font-extrabold uppercase tracking-wider rounded-lg transition-all cursor-pointer border border-slate-200/80 dark:border-slate-800/80"
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-xs font-extrabold uppercase tracking-wider rounded-lg transition-all cursor-pointer border border-slate-200/80 dark:border-slate-800/80"
               title="Restore seed database"
             >
               <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
@@ -1015,7 +1015,7 @@ export default function App() {
                   <option value="Admin / Manager" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Manager Sokha</option>
                   <option value="Normal User" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Staff Sam</option>
                 </select>
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{currentRole}</div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">{currentRole}</div>
               </div>
               <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 text-white rounded-xl flex items-center justify-center font-extrabold text-xs shadow-sm shadow-emerald-500/20">
                 {currentRole === 'Super Admin' ? 'DS' : currentRole === 'Admin / Manager' ? 'MS' : 'SS'}
@@ -1039,7 +1039,7 @@ export default function App() {
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl flex flex-col overflow-hidden shadow-xs">
             <div className="p-6 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="font-black text-slate-800 dark:text-slate-100 text-xl font-display">{t.ledgerTitle}</h2>
+                <h2 className="font-black text-slate-800 dark:text-slate-100 text-2xl font-display">{t.ledgerTitle}</h2>
                 <p className="text-xs text-slate-500 mt-1">{t.ledgerSubtitle}</p>
               </div>
               <button 
@@ -1070,7 +1070,7 @@ export default function App() {
 
               {/* Dept filter */}
               <div className="flex items-center gap-2 bg-white dark:bg-[#0D1527] px-3 py-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-                <span className="text-[9px] font-black uppercase text-slate-400 shrink-0">DEPT:</span>
+                <span className="text-xs font-black uppercase text-slate-400 shrink-0">DEPT:</span>
                 <select
                   value={deptFilter}
                   onChange={(e) => setDeptFilter(e.target.value)}
@@ -1085,7 +1085,7 @@ export default function App() {
 
               {/* Doc type filter */}
               <div className="flex items-center gap-2 bg-white dark:bg-[#0D1527] px-3 py-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-                <span className="text-[9px] font-black uppercase text-slate-400 shrink-0">CAT:</span>
+                <span className="text-xs font-black uppercase text-slate-400 shrink-0">CAT:</span>
                 <select
                   value={docFilter}
                   onChange={(e) => setDocFilter(e.target.value)}
@@ -1100,7 +1100,7 @@ export default function App() {
 
               {/* Status filter */}
               <div className="flex items-center gap-2 bg-white dark:bg-[#0D1527] px-3 py-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-                <span className="text-[9px] font-black uppercase text-slate-400 shrink-0">STATUS:</span>
+                <span className="text-xs font-black uppercase text-slate-400 shrink-0">STATUS:</span>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
@@ -1123,7 +1123,7 @@ export default function App() {
             {/* Main Data Table */}
             <div className="flex-1 overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-slate-50/80 dark:bg-slate-950/40 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800/80">
+                <thead className="bg-slate-50/80 dark:bg-slate-950/40 text-xs font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800/80">
                   <tr>
                     <th className="px-6 py-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/30 select-none" onClick={() => toggleSort('id')}>
                       <div className="flex items-center gap-1">
@@ -1173,7 +1173,7 @@ export default function App() {
                             <div className="font-bold text-slate-900 dark:text-white">
                               {record.fullName}
                             </div>
-                            <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                            <div className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                               {record.department} • #{record.employeeId}
                             </div>
                           </td>
@@ -1182,7 +1182,7 @@ export default function App() {
                             <div className="font-bold max-w-[280px] truncate text-slate-800 dark:text-slate-100" title={record.documentName}>
                               {record.documentName}
                             </div>
-                            <div className="flex gap-2 items-center text-[10px] text-slate-400 mt-1 font-mono">
+                            <div className="flex gap-2 items-center text-xs text-slate-400 mt-1 font-mono">
                               <span>Ref: {record.referenceNumber}</span>
                               <span>•</span>
                               <span className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.2 rounded font-bold">
@@ -1191,7 +1191,7 @@ export default function App() {
                               {record.priorityLevel && (
                                 <>
                                   <span>•</span>
-                                  <span className={`text-[9px] font-black uppercase px-1 rounded ${
+                                  <span className={`text-xs font-black uppercase px-1 rounded ${
                                     record.priorityLevel === 'Urgent' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400' :
                                     record.priorityLevel === 'High' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400' :
                                     'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
@@ -1205,11 +1205,11 @@ export default function App() {
 
                           <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                             <div className="font-bold text-slate-700 dark:text-slate-300">{record.signatureDate}</div>
-                            <div className="text-[10px] text-slate-400 mt-0.5">{record.signatureTime}</div>
+                            <div className="text-xs text-slate-400 mt-0.5">{record.signatureTime}</div>
                           </td>
 
                           <td className="px-6 py-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border tracking-wider ${badgeClass}`}>
+                            <span className={`px-2 py-0.5 rounded text-xs font-black uppercase border tracking-wider ${badgeClass}`}>
                               {record.signatureStatus}
                             </span>
                           </td>
@@ -1221,7 +1221,7 @@ export default function App() {
                       <td colSpan={5} className="p-12 text-center text-slate-400 dark:text-slate-500">
                         <FolderOpen className="w-10 h-10 mx-auto opacity-30 mb-3" />
                         <p className="font-bold text-xs uppercase tracking-wider">No matching records found</p>
-                        <p className="text-[11px] mt-1">Adjust search metrics or filters above.</p>
+                        <p className="text-xs mt-1">Adjust search metrics or filters above.</p>
                       </td>
                     </tr>
                   )}
@@ -1236,7 +1236,7 @@ export default function App() {
           {/* Header section with description and download/export controls */}
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
             <div>
-              <h2 className="font-black text-slate-800 dark:text-slate-100 text-xl font-display">
+              <h2 className="font-black text-slate-800 dark:text-slate-100 text-2xl font-display">
                 {language === 'KH' ? 'របាយការណ៍សវនកម្ម & អនុលោមភាព' : 'Audit & Compliance Reports'}
               </h2>
               <p className="text-xs text-slate-500 mt-1">
@@ -1276,7 +1276,7 @@ export default function App() {
                 </div>
               </div>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-4xl font-black text-slate-800 dark:text-slate-100">{records.length}</span>
+                <span className="text-5xl font-black text-slate-800 dark:text-slate-100">{records.length}</span>
                 <span className="text-xs font-bold text-slate-400">docs</span>
               </div>
             </div>
@@ -1292,7 +1292,7 @@ export default function App() {
                 </div>
               </div>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-4xl font-black text-emerald-600 dark:text-emerald-400">
+                <span className="text-5xl font-black text-emerald-600 dark:text-emerald-400">
                   {records.filter(r => r.signatureStatus === 'Completed' || r.signatureStatus === 'Approved & Signed').length}
                 </span>
                 <span className="text-xs font-bold text-slate-400">docs</span>
@@ -1310,7 +1310,7 @@ export default function App() {
                 </div>
               </div>
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-4xl font-black text-amber-600 dark:text-amber-400">
+                <span className="text-5xl font-black text-amber-600 dark:text-amber-400">
                   {records.filter(r => r.signatureStatus !== 'Completed' && r.signatureStatus !== 'Approved & Signed').length}
                 </span>
                 <span className="text-xs font-bold text-slate-400">docs</span>
@@ -1333,7 +1333,7 @@ export default function App() {
                   </div>
                   <div className="mt-4">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-black text-indigo-600 dark:text-indigo-400">{rate}%</span>
+                      <span className="text-5xl font-black text-indigo-600 dark:text-indigo-400">{rate}%</span>
                     </div>
                     <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-indigo-500 h-full transition-all duration-500" style={{ width: `${rate}%` }}></div>
@@ -1352,13 +1352,13 @@ export default function App() {
             
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
               <div className="space-y-1.5 max-w-xl">
-                <span className="px-2.5 py-1 bg-indigo-500/20 text-indigo-300 text-[9px] font-black uppercase tracking-wider rounded border border-indigo-500/30">
+                <span className="px-2.5 py-1 bg-indigo-500/20 text-indigo-300 text-xs font-black uppercase tracking-wider rounded border border-indigo-500/30">
                   Powered by Gemini 3.5 Flash
                 </span>
-                <h3 className="text-base font-black uppercase tracking-wider mt-2">
+                <h3 className="text-lg font-black uppercase tracking-wider mt-2">
                   {language === 'KH' ? 'បង្កើតរបាយការណ៍វិភាគសរុបដោយ AI' : 'AI Executive Audit & Compliance Summary'}
                 </h3>
-                <p className="text-[11px] text-slate-300">
+                <p className="text-xs text-slate-300">
                   {language === 'KH'
                     ? 'វិភាគកំណត់ត្រាសកម្ម និងស្ថានភាពចុះហត្ថលេខា ដើម្បីចងក្រងជាសេចក្តីសង្ខេបលម្អិត និងការណែនាំផ្សេងៗ។'
                     : 'Automatically scan through all active signature records, identify bottlenecks, and compile a boardroom-ready document log analysis report.'}
@@ -1384,7 +1384,7 @@ export default function App() {
             {aiSummary && (
               <div className="mt-6 bg-slate-950/80 border border-slate-800 p-5 rounded-xl animate-fadeIn text-slate-100 max-h-96 overflow-y-auto">
                 <div className="border-b border-slate-800/80 pb-2.5 mb-3.5 flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                  <span className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                     {language === 'KH' ? 'លទ្ធផលសង្ខេបរបស់ AI' : 'AI Analysis Result'}
                   </span>
@@ -1393,7 +1393,7 @@ export default function App() {
                       navigator.clipboard.writeText(aiSummary);
                       triggerToast(language === 'KH' ? 'បានចម្លងទៅក្តារតម្បៀតខ្ទាស់!' : 'Copied AI summary report text to clipboard!');
                     }}
-                    className="text-[9px] text-indigo-400 hover:text-indigo-300 font-bold uppercase cursor-pointer"
+                    className="text-xs text-indigo-400 hover:text-indigo-300 font-bold uppercase cursor-pointer"
                   >
                     [ {language === 'KH' ? 'ចម្លងអត្ថបទ' : 'Copy Text'} ]
                   </button>
@@ -1432,7 +1432,7 @@ export default function App() {
                   {t.reportsPending} ({records.filter(r => r.signatureStatus !== 'Completed' && r.signatureStatus !== 'Approved & Signed').length})
                 </button>
               </div>
-              <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest font-mono hidden sm:inline">
+              <span className="text-xs text-slate-400 font-extrabold uppercase tracking-widest font-mono hidden sm:inline">
                 AUTO-RECORD TRACKING ACTIVE
               </span>
             </div>
@@ -1442,11 +1442,11 @@ export default function App() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-slate-50/60 dark:bg-slate-950/20 border-b border-slate-100 dark:border-slate-800/60">
-                    <th className="px-6 py-3.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-widest w-28">Ref No.</th>
-                    <th className="px-6 py-3.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Document Title / Name</th>
-                    <th className="px-6 py-3.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-widest w-48">Submitted By</th>
-                    <th className="px-6 py-3.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-widest w-40">Date</th>
-                    <th className="px-6 py-3.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-widest w-48 text-right">{t.reportsAction}</th>
+                    <th className="px-6 py-3.5 text-xs font-extrabold text-slate-400 uppercase tracking-widest w-28">Ref No.</th>
+                    <th className="px-6 py-3.5 text-xs font-extrabold text-slate-400 uppercase tracking-widest">Document Title / Name</th>
+                    <th className="px-6 py-3.5 text-xs font-extrabold text-slate-400 uppercase tracking-widest w-48">Submitted By</th>
+                    <th className="px-6 py-3.5 text-xs font-extrabold text-slate-400 uppercase tracking-widest w-40">Date</th>
+                    <th className="px-6 py-3.5 text-xs font-extrabold text-slate-400 uppercase tracking-widest w-48 text-right">{t.reportsAction}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1475,21 +1475,21 @@ export default function App() {
                         <td className="px-6 py-4 font-mono font-bold text-slate-500 uppercase">{r.referenceNumber || r.id}</td>
                         <td className="px-6 py-4">
                           <div className="font-extrabold text-slate-800 dark:text-slate-100 line-clamp-1">{r.documentName}</div>
-                          <div className="text-[10px] text-slate-400 mt-0.5 font-bold uppercase tracking-wider">{r.documentType || 'General Document'}</div>
+                          <div className="text-xs text-slate-400 mt-0.5 font-bold uppercase tracking-wider">{r.documentType || 'General Document'}</div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="font-extrabold text-slate-700 dark:text-slate-300">{r.fullName}</div>
-                          <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">{r.department}</div>
+                          <div className="text-xs text-slate-400 font-bold uppercase tracking-wide">{r.department}</div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="font-bold text-slate-700 dark:text-slate-300">{r.signatureDate}</div>
-                          <div className="text-[10px] text-slate-400 font-mono mt-0.5">{r.signatureTime}</div>
+                          <div className="text-xs text-slate-400 font-mono mt-0.5">{r.signatureTime}</div>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => setSelectedRecord(r)}
-                              className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:hover:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer inline-flex items-center gap-1 border border-emerald-100 dark:border-emerald-900/40"
+                              className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:hover:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 rounded-lg text-xs font-extrabold transition-all cursor-pointer inline-flex items-center gap-1 border border-emerald-100 dark:border-emerald-900/40"
                               title={t.reportsView}
                             >
                               <Eye className="w-3 h-3" />
@@ -1499,7 +1499,7 @@ export default function App() {
                               <>
                                 <button
                                   onClick={() => setSelectedRecord(r)}
-                                  className="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 dark:hover:bg-indigo-950/50 text-indigo-700 dark:text-indigo-400 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer inline-flex items-center gap-1 border border-indigo-100 dark:border-indigo-900/40"
+                                  className="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 dark:hover:bg-indigo-950/50 text-indigo-700 dark:text-indigo-400 rounded-lg text-xs font-extrabold transition-all cursor-pointer inline-flex items-center gap-1 border border-indigo-100 dark:border-indigo-900/40"
                                   title={t.reportsEdit}
                                 >
                                   <Edit3 className="w-3 h-3" />
@@ -1507,7 +1507,7 @@ export default function App() {
                                 </button>
                                 <button
                                   onClick={() => setReportDeleteTarget(r)}
-                                  className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:hover:bg-rose-950/50 text-rose-700 dark:text-rose-400 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer inline-flex items-center gap-1 border border-rose-100 dark:border-rose-900/40"
+                                  className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:hover:bg-rose-950/50 text-rose-700 dark:text-rose-400 rounded-lg text-xs font-extrabold transition-all cursor-pointer inline-flex items-center gap-1 border border-rose-100 dark:border-rose-900/40"
                                   title={t.reportsDelete}
                                 >
                                   <Trash2 className="w-3 h-3" />
@@ -1533,7 +1533,7 @@ export default function App() {
           {/* Data Management Header */}
           <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
             <div>
-              <h2 className="font-black text-slate-800 dark:text-slate-100 text-xl font-display flex items-center gap-2">
+              <h2 className="font-black text-slate-800 dark:text-slate-100 text-2xl font-display flex items-center gap-2">
                 <HardDrive className="w-5 h-5 text-indigo-500" />
                 {t.dmTitle}
               </h2>
@@ -1541,7 +1541,7 @@ export default function App() {
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+              <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
                 {language === 'KH' ? 'សុវត្ថិភាពសកម្ម' : 'Security Active'}
               </span>
             </div>
@@ -1556,7 +1556,7 @@ export default function App() {
                 </span>
                 <Database className="w-4 h-4 text-slate-400" />
               </div>
-              <div className="mt-3 text-3xl font-black text-slate-800 dark:text-slate-100">{records.length}</div>
+              <div className="mt-3 text-4xl font-black text-slate-800 dark:text-slate-100">{records.length}</div>
             </div>
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 p-5 rounded-2xl shadow-xs">
               <div className="flex items-center justify-between">
@@ -1565,7 +1565,7 @@ export default function App() {
                 </span>
                 <FolderOpen className="w-4 h-4 text-emerald-500" />
               </div>
-              <div className="mt-3 text-3xl font-black text-emerald-600 dark:text-emerald-400">
+              <div className="mt-3 text-4xl font-black text-emerald-600 dark:text-emerald-400">
                 {records.length > 0 ? `${(JSON.stringify(records).length / 1024).toFixed(1)} KB` : '0 KB'}
               </div>
             </div>
@@ -1595,10 +1595,10 @@ export default function App() {
                   <Download className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-sm font-display">
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">
                     {language === 'KH' ? 'នាំចេញ Backup ទិន្នន័យ' : 'Backup Data'}
                   </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{t.dmBackupDesc}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{t.dmBackupDesc}</p>
                 </div>
               </div>
 
@@ -1620,7 +1620,7 @@ export default function App() {
               </div>
 
               <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/60 rounded-xl p-4">
-                <p className="text-[11px] text-slate-500 leading-relaxed">
+                <p className="text-xs text-slate-500 leading-relaxed">
                   {language === 'KH' 
                     ? 'JSON សម្រាប់ស្ដារទិន្នន័យក្នុងប្រព័ន្ធ។ Excel (.xlsx) សម្រាប់ការវិភាគ និងរបាយការណ៍។'
                     : 'JSON format is used for system backup and restoration. Excel (.xlsx) format is for reporting and data analysis.'}
@@ -1635,10 +1635,10 @@ export default function App() {
                   <Trash2 className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-sm font-display">
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">
                     {language === 'KH' ? 'កំណត់ឡើងវិញ និងសម្អាតទិន្នន័យ' : 'Reset Data'}
                   </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{t.dmResetDesc}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{t.dmResetDesc}</p>
                 </div>
               </div>
 
@@ -1682,7 +1682,7 @@ export default function App() {
               </div>
 
               <div className="bg-amber-50 dark:bg-amber-950/10 border border-amber-200/50 dark:border-amber-900/20 rounded-xl p-4">
-                <p className="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed font-semibold">
+                <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed font-semibold">
                   {language === 'KH' 
                     ? '⚠️ ការព្រមាន៖ សកម្មភាពនៃការលុបទិន្នន័យទាំងអស់ ឬស្ដារឡើងវិញមិនអាចត្រឡប់ក្រោយបានទេ។ សូមប្រាកដថាអ្នកបានរក្សាទុក Backup មុននឹងប្រតិបត្តិការណ៍។'
                     : '⚠️ Warning: Data wipe and restore actions are irreversible. Please ensure you have exported a backup before performing these operations.'}
@@ -1699,7 +1699,7 @@ export default function App() {
 
         {/* Status Bar / Footer */}
         <footer className="h-10 bg-white dark:bg-[#0D1527] border-t border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-6 text-[9px] text-slate-500 font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-6 text-xs text-slate-500 font-bold uppercase tracking-wider">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               SECURE SHA-256 VAULT ACTIVE
@@ -1709,7 +1709,7 @@ export default function App() {
               ALL ENCRYPTED TRANSACTIONS REGISTERED
             </div>
           </div>
-          <div className="text-[9px] text-slate-400">
+          <div className="text-xs text-slate-400">
             System v3.0.0
           </div>
         </footer>
@@ -1745,7 +1745,7 @@ export default function App() {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-fadeIn">
             <div className="bg-rose-600 dark:bg-rose-700 p-5 flex items-center gap-3">
               <AlertCircle className="w-6 h-6 text-white" />
-              <h3 className="text-sm font-black text-white uppercase tracking-wider">
+              <h3 className="text-base font-black text-white uppercase tracking-wider">
                 {language === 'KH' ? 'បញ្ជាក់ការលុប' : 'Confirm Deletion'}
               </h3>
             </div>
@@ -1757,7 +1757,7 @@ export default function App() {
               </p>
               <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800 rounded-xl p-3">
                 <p className="text-xs font-black text-slate-800 dark:text-slate-200">{reportDeleteTarget.documentName}</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">{reportDeleteTarget.fullName} &bull; {reportDeleteTarget.department}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{reportDeleteTarget.fullName} &bull; {reportDeleteTarget.department}</p>
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button
@@ -1787,10 +1787,10 @@ export default function App() {
         <div className="fixed bottom-6 right-6 z-[100] max-w-sm bg-slate-900 dark:bg-slate-950 text-white border border-slate-800 p-4 rounded-2xl shadow-2xl flex items-start gap-3 animate-slideUp">
           <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5 animate-pulse" />
           <div className="space-y-0.5">
-            <h4 className="text-[10px] font-black uppercase tracking-wider text-emerald-400">
+            <h4 className="text-xs font-black uppercase tracking-wider text-emerald-400">
               System Notification
             </h4>
-            <p className="text-[11px] font-semibold text-slate-200">
+            <p className="text-xs font-semibold text-slate-200">
               {toastMessage}
             </p>
           </div>
