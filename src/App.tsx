@@ -1202,32 +1202,6 @@ export default function App() {
               <span className="hidden lg:inline">{t.reset}</span>
             </button>
 
-            <div className="w-px h-5 bg-slate-200 dark:border-slate-800 hidden sm:block"></div>
-
-            {/* Profile / Role Selector */}
-            <div className="flex items-center gap-2 sm:gap-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 rounded-xl px-2 sm:px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-950/80 transition-all cursor-default">
-              <div className="text-right flex flex-col justify-center hidden sm:flex">
-                <select
-                  value={currentRole}
-                  onChange={(e) => setCurrentRole(e.target.value as UserRole)}
-                  className="bg-transparent border-none outline-none p-0 text-[11px] font-black text-slate-800 dark:text-slate-200 focus:ring-0 cursor-pointer text-right select-none ring-0 focus-visible:ring-0"
-                >
-                  <option value="Super Admin" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Director Sophia</option>
-                  <option value="Admin / Manager" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Manager Sokha</option>
-                  <option value="Normal User" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Staff Sam</option>
-                </select>
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{currentRole}</div>
-              </div>
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-extrabold text-xs shadow-sm shrink-0 overflow-hidden">
-                {profilePhoto ? (
-                  <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-400 text-white flex items-center justify-center shadow-sm shadow-emerald-500/20">
-                    {profileInitials}
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         </header>
 
