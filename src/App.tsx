@@ -1047,19 +1047,6 @@ export default function App() {
               </button>
             )}
           </div>
-
-          {/* SignStore AI Badge (only when expanded) */}
-          {!isSidebarCollapsed && (
-            <div className="mt-3 mx-1 flex items-center gap-2 py-2 px-3 rounded-xl bg-white/[0.03] border border-white/[0.04] group-hover:bg-white/[0.05] transition-all duration-300">
-              <div className="w-6 h-6 bg-gradient-to-br from-emerald-400/80 via-teal-500/80 to-cyan-400/80 rounded-lg flex items-center justify-center text-white text-[10px] font-black shadow-sm shadow-emerald-500/10 shrink-0">
-                Σ
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-[11px] font-bold text-white/70 tracking-tight leading-tight font-display">SignStore AI</span>
-                <span className="text-[9px] text-emerald-400/50 font-extrabold uppercase tracking-[0.15em] leading-tight">{t.complianceBadge}</span>
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="mx-4 border-t border-white/5"></div>
