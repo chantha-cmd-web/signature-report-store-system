@@ -111,3 +111,35 @@ textarea {
     font-size: 16px !important;
   }
 }
+
+/* Smooth touch interactions for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, a, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Sidebar transition smoothness */
+nav {
+  will-change: transform, width;
+}
+
+/* Responsive table container */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area padding for notched phones */
+@supports (padding: env(safe-area-inset-bottom)) {
+  footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Prevent horizontal overflow on mobile */
+html, body, #root {
+  overflow-x: hidden;
+  max-width: 100vw;
+}

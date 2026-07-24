@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as XLSX from 'xlsx';
 import {
   FileText,
@@ -25,7 +25,18 @@ import {
   Trash2,
   HardDrive,
   Eye,
-  Edit3
+  Edit3,
+  User,
+  Camera,
+  PanelLeftClose,
+  PanelLeft,
+  LogOut,
+  Settings,
+  ChevronRight,
+  Menu,
+  X,
+  Image as ImageIcon,
+  Save
 } from 'lucide-react';
 
 import { SignatureRecord, UserRole, AuditLog, DocumentStatus } from './types';
@@ -110,7 +121,20 @@ const TRANSLATIONS = {
     reportsView: "View",
     reportsEdit: "Edit",
     reportsDelete: "Delete",
-    reportsAction: "Action"
+    reportsAction: "Action",
+    profile: "Profile",
+    profileManagement: "Profile Management",
+    profileSubtitle: "Manage your account profile, photo, and display settings.",
+    displayName: "Display Name",
+    uploadPhoto: "Upload Photo",
+    removePhoto: "Remove Photo",
+    saveProfile: "Save Profile",
+    profileSaved: "Profile updated successfully!",
+    adminOnly: "Admin Only",
+    changePhoto: "Change Photo",
+    accountInfo: "Account Information",
+    role: "Role",
+    memberSince: "Member Since"
   },
   KH: {
     title: "ប្រព័ន្ធលិខិតស្នាមផ្ទាល់ខ្លួន",
@@ -186,7 +210,20 @@ const TRANSLATIONS = {
     reportsView: "ពិនិត្យ",
     reportsEdit: "កែសម្រួល",
     reportsDelete: "លុប",
-    reportsAction: "សកម្មភាព"
+    reportsAction: "សកម្មភាព",
+    profile: "គណនី",
+    profileManagement: "ការគ្រប់គ្រងគណនី",
+    profileSubtitle: "គ្រប់គ្រងរូបភាពគណនី និងការកំណត់ឈ្មោះបង្ហាញរបស់អ្នក។",
+    displayName: "ឈ្មោះបង្ហាញ",
+    uploadPhoto: "បង្ហោះរូបភាព",
+    removePhoto: "លុបរូបភាព",
+    saveProfile: "រក្សាទុកគណនី",
+    profileSaved: "បានធ្វើបច្ចុប្បន្នភាពគណនីដោយជោគជ័យ!",
+    adminOnly: "សម្រាប់អ្នកគ្រប់គ្រងប៉ុណ្ណោះ",
+    changePhoto: "ផ្លាស់ប្ដូររូបភាព",
+    accountInfo: "ព័ត៌មានគណនី",
+    role: "តួនាទី",
+    memberSince: "ជាសមាជិកតាំងពី"
   }
 };
 
@@ -450,7 +487,21 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('Super Admin');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState<'EN' | 'KH'>('EN');
-  const [activeView, setActiveView] = useState<'dashboard' | 'reports' | 'dataManagement'>('dashboard');
+  const [activeView, setActiveView] = useState<'dashboard' | 'reports' | 'dataManagement' | 'profile'>('dashboard');
+
+  // Sidebar state
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebar_collapsed');
+    return saved === 'true';
+  });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Profile state (persisted to localStorage)
+  const [profileName, setProfileName] = useState(() => localStorage.getItem('profile_name') || '');
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(() => localStorage.getItem('profile_photo') || null);
+  const [profileNameDraft, setProfileNameDraft] = useState('');
+  const [profilePhotoDraft, setProfilePhotoDraft] = useState<string | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   // Filter/Search states
   const [searchTerm, setSearchTerm] = useState('');
@@ -472,7 +523,6 @@ export default function App() {
   // State-based Toast Notifications
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [reportDeleteTarget, setReportDeleteTarget] = useState<SignatureRecord | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
@@ -585,6 +635,64 @@ export default function App() {
     }
   };
 
+  // Persist sidebar collapsed state
+  useEffect(() => {
+    localStorage.setItem('sidebar_collapsed', String(isSidebarCollapsed));
+  }, [isSidebarCollapsed]);
+
+  const canApprove = currentRole === 'Super Admin' || currentRole === 'Admin / Manager';
+  const isAdmin = currentRole === 'Super Admin' || currentRole === 'Admin / Manager';
+  const currentUserName = profileName.trim() || (
+    currentRole === 'Super Admin' ? 'Director Sophia' : currentRole === 'Admin / Manager' ? 'Manager Sokha' : 'Staff Sam'
+  );
+  const profileInitials = currentUserName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+  // Guard: redirect away from dataManagement if not admin
+  useEffect(() => {
+    if (activeView === 'dataManagement' && !isAdmin) {
+      setActiveView('dashboard');
+    }
+  }, [activeView, isAdmin]);
+
+  // Profile handlers
+  const handleSaveProfile = () => {
+    const name = profileNameDraft.trim();
+    setProfileName(name);
+    setProfilePhoto(profilePhotoDraft);
+    localStorage.setItem('profile_name', name);
+    if (profilePhotoDraft) {
+      localStorage.setItem('profile_photo', profilePhotoDraft);
+    } else {
+      localStorage.removeItem('profile_photo');
+    }
+    setIsEditingProfile(false);
+    triggerToast(t.profileSaved);
+  };
+
+  const handleStartEditProfile = () => {
+    setProfileNameDraft(profileName);
+    setProfilePhotoDraft(profilePhoto);
+    setIsEditingProfile(true);
+  };
+
+  const handleProfilePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      triggerToast('Photo must be under 2MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setProfilePhotoDraft(ev.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveProfilePhoto = () => {
+    setProfilePhotoDraft(null);
+  };
+
   // Create new record handler
   const handleAddRecord = (recordData: Omit<SignatureRecord, 'id' | 'auditTrail'>) => {
     const nextIdNum =
@@ -662,10 +770,9 @@ export default function App() {
 
   // Update complete record handler (for direct edits)
   const handleUpdateRecord = (updatedRecord: SignatureRecord) => {
-    const editorName = currentRole === 'Super Admin' ? 'Director Sophia' : currentRole === 'Admin / Manager' ? 'Manager Sokha' : 'Staff Sam';
     const log: AuditLog = {
       timestamp: `${new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`,
-      user: editorName,
+      user: currentUserName,
       action: `Modified report details & metadata`,
       deviceInfo: navigator.userAgent,
     };
@@ -835,7 +942,6 @@ export default function App() {
 
   const uniqueDepts = Array.from(new Set(records.map((r) => r.department)));
   const uniqueDocs = Array.from(new Set(records.map((r) => r.documentType)));
-  const canApprove = currentRole === 'Super Admin' || currentRole === 'Admin / Manager';
 
   const toggleSort = (field: 'id' | 'name' | 'date') => {
     if (sortBy === field) {
@@ -852,26 +958,44 @@ export default function App() {
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm lg:hidden transition-opacity duration-300"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar Navigation */}
-      <nav className={`w-64 bg-[#0F172A] dark:bg-[#070A13] flex flex-col shrink-0 border-r border-slate-200/10 text-slate-300 fixed lg:relative z-50 h-full transition-transform duration-300 ${
+      <nav className={`fixed lg:fixed top-0 left-0 h-full bg-gradient-to-b from-[#0B1120] via-[#0F172A] to-[#0B1120] dark:from-[#050810] dark:via-[#070A13] dark:to-[#050810] flex flex-col shrink-0 text-slate-300 z-50 transition-all duration-300 ease-in-out border-r border-white/5 ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-      }`}>
-        <div className="p-6 flex items-center gap-3 border-b border-slate-200/10 shrink-0">
-          <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center text-white font-extrabold text-lg shadow-sm shadow-emerald-500/20">Σ</div>
-          <div className="flex flex-col">
-            <span className="text-white font-black tracking-tight text-xl font-display">SignStore AI</span>
-            <span className="text-xs text-emerald-400 font-extrabold uppercase tracking-widest">{t.complianceBadge}</span>
-          </div>
-        </div>
+      } ${isSidebarCollapsed ? 'lg:w-[72px]' : 'lg:w-[260px]'} w-[260px]`}>
         
-        <div className="flex-1 py-6 overflow-y-auto space-y-6">
-          <div>
-            <div className="px-6 mb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">{t.mainMenu}</div>
+        {/* Logo / Brand Area */}
+        <div className={`p-5 flex items-center border-b border-white/5 shrink-0 ${isSidebarCollapsed ? 'justify-center' : 'gap-3'}`}>
+          <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-400 rounded-2xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-emerald-500/25 shrink-0">
+            Σ
+          </div>
+          {!isSidebarCollapsed && (
+            <div className="flex flex-col overflow-hidden">
+              <span className="text-white font-black tracking-tight text-lg font-display leading-tight">SignStore AI</span>
+              <span className="text-[10px] text-emerald-400/80 font-extrabold uppercase tracking-[0.2em] leading-tight">{t.complianceBadge}</span>
+            </div>
+          )}
+          {/* Close button on mobile */}
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="lg:hidden ml-auto p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Navigation Menu */}
+        <div className="flex-1 py-4 overflow-y-auto overflow-x-hidden">
+          <div className={`px-3 mb-1 ${isSidebarCollapsed ? 'text-center' : ''}`}>
+            {!isSidebarCollapsed && (
+              <div className="px-3 mb-2 text-[10px] font-extrabold text-slate-500/80 uppercase tracking-[0.2em]">{t.mainMenu}</div>
+            )}
+            
+            {/* Dashboard */}
             <button
               onClick={() => {
                 setActiveView('dashboard');
@@ -881,71 +1005,143 @@ export default function App() {
                 setStatusFilter('All');
                 setIsMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-6 py-4 border-l-4 font-bold text-sm text-left cursor-pointer transition-all ${
+              title={isSidebarCollapsed ? t.dashboard : undefined}
+              className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
+                isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+              } ${
                 activeView === 'dashboard'
-                  ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500 font-extrabold'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/30 border-transparent'
+                  ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/5 text-emerald-400 shadow-sm shadow-emerald-500/5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <FileText className="w-4.5 h-4.5" />
-              {t.dashboard}
+              <FileText className={`w-[18px] h-[18px] shrink-0 ${activeView === 'dashboard' ? 'text-emerald-400' : ''}`} />
+              {!isSidebarCollapsed && <span>{t.dashboard}</span>}
+              {activeView === 'dashboard' && !isSidebarCollapsed && (
+                <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
+              )}
             </button>
+
+            {/* Reports */}
             <button
               onClick={() => { setActiveView('reports'); setIsMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-3 px-6 py-4 border-l-4 font-bold text-sm text-left cursor-pointer transition-all ${
+              title={isSidebarCollapsed ? t.reports : undefined}
+              className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
+                isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+              } ${
                 activeView === 'reports'
-                  ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500 font-extrabold'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/30 border-transparent'
+                  ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/5 text-emerald-400 shadow-sm shadow-emerald-500/5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <TrendingUp className="w-4.5 h-4.5" />
-              {t.reports}
+              <TrendingUp className={`w-[18px] h-[18px] shrink-0 ${activeView === 'reports' ? 'text-emerald-400' : ''}`} />
+              {!isSidebarCollapsed && <span>{t.reports}</span>}
+              {activeView === 'reports' && !isSidebarCollapsed && (
+                <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
+              )}
             </button>
-            <button
-              onClick={() => { setActiveView('dataManagement'); setIsMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-3 px-6 py-4 border-l-4 font-bold text-sm text-left cursor-pointer transition-all ${
-                activeView === 'dataManagement'
-                  ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500 font-extrabold'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/30 border-transparent'
-              }`}
-            >
-              <HardDrive className="w-4.5 h-4.5" />
-              {t.dataManagement}
-            </button>
+
+            {/* Data Management — Admin Only */}
+            {isAdmin && (
+              <button
+                onClick={() => { setActiveView('dataManagement'); setIsMobileMenuOpen(false); }}
+                title={isSidebarCollapsed ? t.dataManagement : undefined}
+                className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
+                  isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+                } ${
+                  activeView === 'dataManagement'
+                    ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/5 text-emerald-400 shadow-sm shadow-emerald-500/5'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <HardDrive className={`w-[18px] h-[18px] shrink-0 ${activeView === 'dataManagement' ? 'text-emerald-400' : ''}`} />
+                {!isSidebarCollapsed && <span>{t.dataManagement}</span>}
+                {activeView === 'dataManagement' && !isSidebarCollapsed && (
+                  <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
+                )}
+              </button>
+            )}
+
+            {/* Profile — Admin Only */}
+            {isAdmin && (
+              <button
+                onClick={() => { setActiveView('profile'); setIsMobileMenuOpen(false); }}
+                title={isSidebarCollapsed ? t.profile : undefined}
+                className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
+                  isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+                } ${
+                  activeView === 'profile'
+                    ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/5 text-emerald-400 shadow-sm shadow-emerald-500/5'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <User className={`w-[18px] h-[18px] shrink-0 ${activeView === 'profile' ? 'text-emerald-400' : ''}`} />
+                {!isSidebarCollapsed && <span>{t.profile}</span>}
+                {activeView === 'profile' && !isSidebarCollapsed && (
+                  <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
+                )}
+              </button>
+            )}
+
+            {/* Divider */}
+            <div className="my-3 border-t border-white/5 mx-2"></div>
+
+            {/* Log Signed Document */}
             <button
               onClick={() => { setShowAddForm(true); setIsMobileMenuOpen(false); }}
-              className="w-full flex items-center gap-3 px-6 py-4 text-slate-400 hover:text-white transition-all text-left text-sm font-bold cursor-pointer hover:bg-slate-800/30"
+              title={isSidebarCollapsed ? t.addLog : undefined}
+              className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 ${
+                isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+              } text-slate-400 hover:text-white hover:bg-white/5`}
             >
-              <Plus className="w-4.5 h-4.5" />
-              {t.addLog}
+              <Plus className="w-[18px] h-[18px] shrink-0" />
+              {!isSidebarCollapsed && <span>{t.addLog}</span>}
             </button>
           </div>
         </div>
 
-        <div className="p-6 border-t border-slate-200/10 shrink-0 bg-[#070A13]">
-          <div className="flex items-center gap-2 text-slate-400 text-xs font-extrabold uppercase tracking-widest">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            {t.complianceBadge}
+        {/* Sidebar Collapse Toggle (Desktop) */}
+        <div className="hidden lg:flex border-t border-white/5 p-2 shrink-0">
+          <button
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className={`w-full flex items-center gap-2 rounded-xl px-3 py-2 text-[11px] font-bold text-slate-500 hover:text-slate-300 hover:bg-white/5 cursor-pointer transition-all duration-200 ${isSidebarCollapsed ? 'justify-center' : ''}`}
+            title={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isSidebarCollapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+            {!isSidebarCollapsed && <span className="uppercase tracking-wider">Collapse</span>}
+          </button>
+        </div>
+
+        {/* Footer Status */}
+        <div className={`p-4 border-t border-white/5 shrink-0 ${isSidebarCollapsed ? 'px-2' : ''}`}>
+          <div className={`flex items-center gap-2 text-[10px] font-extrabold text-emerald-400/60 uppercase tracking-[0.15em] ${isSidebarCollapsed ? 'justify-center' : ''}`}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            {!isSidebarCollapsed && <span>{t.complianceBadge}</span>}
           </div>
         </div>
       </nav>
 
       {/* Main Content Workspace */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <main className={`flex-1 flex flex-col min-w-0 overflow-hidden transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'lg:ml-[72px]' : 'lg:ml-[260px]'}`}>
         
         {/* Header Bar */}
-        <header className="h-16 bg-white dark:bg-[#0D1527] border-b border-slate-200 dark:border-slate-800/60 px-4 sm:px-8 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3 w-1/3">
+        <header className="h-14 sm:h-16 bg-white dark:bg-[#0D1527] border-b border-slate-200 dark:border-slate-800/60 px-3 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 cursor-pointer"
+              className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800 transition-all shrink-0"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <Menu className="w-4 h-4" />
             </button>
-            <div className="relative w-full">
+            {/* Desktop collapse toggle */}
+            <button
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="hidden lg:flex p-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800 transition-all shrink-0"
+              title={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              {isSidebarCollapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+            </button>
+            <div className="relative w-full max-w-md">
               <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
                 <Search className="w-4 h-4" />
               </span>
@@ -954,43 +1150,43 @@ export default function App() {
                 placeholder={t.searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-200 placeholder:text-slate-400"
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 transition-all"
               />
             </div>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-6">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             
             {/* Elegant Language Switcher */}
-            <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-lg p-0.5">
+            <div className="hidden sm:flex items-center gap-0.5 bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-lg p-0.5">
               <button
                 onClick={() => setLanguage('EN')}
-                className={`px-2 py-1 text-xs font-extrabold rounded cursor-pointer transition-all ${
+                className={`px-2 py-1 text-[11px] font-extrabold rounded-md cursor-pointer transition-all ${
                   language === 'EN'
-                    ? 'bg-white dark:bg-[#0D1527] text-emerald-600 dark:text-emerald-400 shadow-xs'
-                    : 'text-slate-500 hover:text-slate-800'
+                    ? 'bg-white dark:bg-[#0D1527] text-emerald-600 dark:text-emerald-400 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
                 }`}
               >
                 EN
               </button>
               <button
                 onClick={() => setLanguage('KH')}
-                className={`px-2 py-1 text-xs font-extrabold rounded cursor-pointer transition-all ${
+                className={`px-2 py-1 text-[11px] font-extrabold rounded-md cursor-pointer transition-all ${
                   language === 'KH'
-                    ? 'bg-white dark:bg-[#0D1527] text-emerald-600 dark:text-emerald-400 shadow-xs'
-                    : 'text-slate-500 hover:text-slate-800'
+                    ? 'bg-white dark:bg-[#0D1527] text-emerald-600 dark:text-emerald-400 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
                 }`}
               >
                 KH
               </button>
             </div>
 
-            <div className="w-px h-6 bg-slate-200 dark:bg-slate-800/80"></div>
+            <div className="w-px h-5 bg-slate-200 dark:bg-slate-800/80 hidden sm:block"></div>
 
             {/* Dark / Light Toggle */}
             <button
               onClick={handleToggleTheme}
-              className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 transition-all cursor-pointer border border-slate-200/80 dark:border-slate-800/80"
+              className="p-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 transition-all cursor-pointer border border-slate-200/80 dark:border-slate-800/80"
               title="Toggle Theme"
             >
               {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
@@ -999,37 +1195,44 @@ export default function App() {
             {/* Restore seeds option */}
             <button
               onClick={handleResetDatabase}
-              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-xs font-extrabold uppercase tracking-wider rounded-lg transition-all cursor-pointer border border-slate-200/80 dark:border-slate-800/80"
+              className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-[11px] font-extrabold uppercase tracking-wider rounded-lg transition-all cursor-pointer border border-slate-200/80 dark:border-slate-800/80"
               title="Restore seed database"
             >
               <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-              {t.reset}
+              <span className="hidden lg:inline">{t.reset}</span>
             </button>
 
-            <div className="w-px h-6 bg-slate-200 dark:bg-slate-800"></div>
+            <div className="w-px h-5 bg-slate-200 dark:border-slate-800 hidden sm:block"></div>
 
-            <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 rounded-xl px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-950/80 transition-all">
-              <div className="text-right flex flex-col justify-center">
+            {/* Profile / Role Selector */}
+            <div className="flex items-center gap-2 sm:gap-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/60 rounded-xl px-2 sm:px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-950/80 transition-all cursor-default">
+              <div className="text-right flex flex-col justify-center hidden sm:flex">
                 <select
                   value={currentRole}
                   onChange={(e) => setCurrentRole(e.target.value as UserRole)}
-                  className="bg-transparent border-none outline-none p-0 text-xs font-black text-slate-800 dark:text-slate-200 focus:ring-0 cursor-pointer text-right select-none ring-0 focus-visible:ring-0"
+                  className="bg-transparent border-none outline-none p-0 text-[11px] font-black text-slate-800 dark:text-slate-200 focus:ring-0 cursor-pointer text-right select-none ring-0 focus-visible:ring-0"
                 >
                   <option value="Super Admin" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Director Sophia</option>
                   <option value="Admin / Manager" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Manager Sokha</option>
                   <option value="Normal User" className="dark:bg-[#0D1527] dark:text-slate-200 text-left">Staff Sam</option>
                 </select>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">{currentRole}</div>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{currentRole}</div>
               </div>
-              <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 text-white rounded-xl flex items-center justify-center font-extrabold text-xs shadow-sm shadow-emerald-500/20">
-                {currentRole === 'Super Admin' ? 'DS' : currentRole === 'Admin / Manager' ? 'MS' : 'SS'}
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-extrabold text-xs shadow-sm shrink-0 overflow-hidden">
+                {profilePhoto ? (
+                  <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-400 text-white flex items-center justify-center shadow-sm shadow-emerald-500/20">
+                    {profileInitials}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </header>
 
         {/* Content Body Grid */}
-        <div className="flex-1 p-8 overflow-y-auto flex flex-col gap-8">
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto flex flex-col gap-6 sm:gap-8">
           
           {activeView === 'dashboard' ? (
             <>
@@ -1454,6 +1657,131 @@ export default function App() {
           </div>
 
         </div>
+      ) : activeView === 'profile' ? (
+        /* Profile Management View */
+        <div className="space-y-8 animate-fadeIn">
+          
+          {/* Profile Header */}
+          <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
+            <div>
+              <h2 className="font-black text-slate-800 dark:text-slate-100 text-2xl font-display flex items-center gap-2">
+                <User className="w-5 h-5 text-emerald-500" />
+                {t.profileManagement}
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">{t.profileSubtitle}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+                {t.adminOnly}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* Profile Photo Card */}
+            <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs flex flex-col items-center">
+              <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 shadow-lg shadow-emerald-500/10 border-2 border-emerald-500/20">
+                {(isEditingProfile ? profilePhotoDraft : profilePhoto) ? (
+                  <img 
+                    src={(isEditingProfile ? profilePhotoDraft : profilePhoto)!} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover" 
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center text-white text-3xl font-black">
+                    {profileInitials}
+                  </div>
+                )}
+              </div>
+              <h3 className="font-black text-slate-800 dark:text-white text-lg font-display">{currentUserName}</h3>
+              <p className="text-xs text-slate-400 mt-0.5 font-bold uppercase tracking-wider">{currentRole}</p>
+              <div className="mt-4 w-full space-y-2">
+                {isEditingProfile ? (
+                  <>
+                    <label className="w-full py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 dark:hover:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2">
+                      <Camera className="w-4 h-4" />
+                      {t.changePhoto}
+                      <input type="file" accept="image/*" onChange={handleProfilePhotoUpload} className="hidden" />
+                    </label>
+                    {profilePhotoDraft && (
+                      <button onClick={handleRemoveProfilePhoto} className="w-full py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2">
+                        <Trash2 className="w-4 h-4" />
+                        {t.removePhoto}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <label className="w-full py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700">
+                    <Upload className="w-4 h-4" />
+                    {t.uploadPhoto}
+                    <input type="file" accept="image/*" onChange={(e) => { handleProfilePhotoUpload(e); setIsEditingProfile(true); }} className="hidden" />
+                  </label>
+                )}
+              </div>
+            </div>
+
+            {/* Profile Form */}
+            <div className="lg:col-span-2 bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs space-y-6">
+              <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center">
+                  <Settings className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">{t.accountInfo}</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">{language === 'KH' ? 'កែសម្រួលព័ត៌មានគណនីរបស់អ្នក។' : 'Update your account information.'}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t.displayName}</label>
+                  {isEditingProfile ? (
+                    <input type="text" value={profileNameDraft} onChange={(e) => setProfileNameDraft(e.target.value)} placeholder={currentRole === 'Super Admin' ? 'Director Sophia' : currentRole === 'Admin / Manager' ? 'Manager Sokha' : 'Staff Sam'} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all" />
+                  ) : (
+                    <div className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200">{currentUserName}</div>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t.role}</label>
+                  <div className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-emerald-500" />{currentRole}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t.memberSince}</label>
+                  <div className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-indigo-500" />
+                    {new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{language === 'KH' ? 'ស្ថានភាព' : 'Status'}</label>
+                  <div className="w-full px-4 py-3 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 rounded-xl text-sm font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    {language === 'KH' ? 'សកម្ម' : 'Active Session'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                {isEditingProfile ? (
+                  <>
+                    <button onClick={() => setIsEditingProfile(false)} className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl cursor-pointer transition-all">{t.cancel}</button>
+                    <button onClick={handleSaveProfile} className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-md shadow-emerald-500/15 inline-flex items-center gap-2">
+                      <Save className="w-4 h-4" />{t.saveProfile}
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={handleStartEditProfile} className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-md shadow-emerald-500/15 inline-flex items-center gap-2">
+                    <Edit3 className="w-4 h-4" />{language === 'KH' ? 'កែសម្រួលគណនី' : 'Edit Profile'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         /* Data Management View */
         <div className="space-y-8 animate-fadeIn">
@@ -1479,166 +1807,92 @@ export default function App() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 p-5 rounded-2xl shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
-                  {language === 'KH' ? 'ឯកសារសរុប' : 'Total Records'}
-                </span>
+                <span className="text-xs font-black text-slate-500 uppercase tracking-wider">{language === 'KH' ? 'ឯកសារសរុប' : 'Total Records'}</span>
                 <Database className="w-4 h-4 text-slate-400" />
               </div>
               <div className="mt-3 text-4xl font-black text-slate-800 dark:text-slate-100">{records.length}</div>
             </div>
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 p-5 rounded-2xl shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-                  {language === 'KH' ? 'ទំហំប៉ាន់ប្រមាណ' : 'Estimated Size'}
-                </span>
+                <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">{language === 'KH' ? 'ទំហំប៉ាន់ប្រមាណ' : 'Estimated Size'}</span>
                 <FolderOpen className="w-4 h-4 text-emerald-500" />
               </div>
-              <div className="mt-3 text-4xl font-black text-emerald-600 dark:text-emerald-400">
-                {records.length > 0 ? `${(JSON.stringify(records).length / 1024).toFixed(1)} KB` : '0 KB'}
-              </div>
+              <div className="mt-3 text-4xl font-black text-emerald-600 dark:text-emerald-400">{records.length > 0 ? `${(JSON.stringify(records).length / 1024).toFixed(1)} KB` : '0 KB'}</div>
             </div>
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 p-5 rounded-2xl shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                  {language === 'KH' ? 'ថ្ងៃចុងក្រោយរក្សាទុក' : 'Last Saved'}
-                </span>
+                <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">{language === 'KH' ? 'ថ្ងៃចុងក្រោយរក្សាទុក' : 'Last Saved'}</span>
                 <Clock className="w-4 h-4 text-indigo-500" />
               </div>
-              <div className="mt-3 text-sm font-black text-indigo-600 dark:text-indigo-400">
-                {records.length > 0 
-                  ? new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                  : '-'
-                }
-              </div>
+              <div className="mt-3 text-sm font-black text-indigo-600 dark:text-indigo-400">{records.length > 0 ? new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</div>
             </div>
           </div>
 
           {/* Main Data Management Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
             {/* Backup Section */}
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xs">
               <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center">
-                  <Download className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                </div>
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center"><Download className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /></div>
                 <div>
-                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">
-                    {language === 'KH' ? 'នាំចេញ Backup ទិន្នន័យ' : 'Backup Data'}
-                  </h3>
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">{language === 'KH' ? 'នាំចេញ Backup ទិន្នន័យ' : 'Backup Data'}</h3>
                   <p className="text-xs text-slate-400 mt-0.5">{t.dmBackupDesc}</p>
                 </div>
               </div>
-
               <div className="space-y-3">
-                <button
-                  onClick={handleExportJSON}
-                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-500/15"
-                >
-                  <Download className="w-4 h-4" />
-                  {t.dmBackupJson}
-                </button>
-                <button
-                  onClick={handleExportXLSX}
-                  className="w-full py-3 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-md"
-                >
-                  <FileText className="w-4 h-4" />
-                  {t.dmBackupXlsx}
-                </button>
+                <button onClick={handleExportJSON} className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-500/15"><Download className="w-4 h-4" />{t.dmBackupJson}</button>
+                <button onClick={handleExportXLSX} className="w-full py-3 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-md"><FileText className="w-4 h-4" />{t.dmBackupXlsx}</button>
               </div>
-
               <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/60 rounded-xl p-4">
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  {language === 'KH' 
-                    ? 'JSON សម្រាប់ស្ដារទិន្នន័យក្នុងប្រព័ន្ធ។ Excel (.xlsx) សម្រាប់ការវិភាគ និងរបាយការណ៍។'
-                    : 'JSON format is used for system backup and restoration. Excel (.xlsx) format is for reporting and data analysis.'}
-                </p>
+                <p className="text-xs text-slate-500 leading-relaxed">{language === 'KH' ? 'JSON សម្រាប់ស្ដារទិន្នន័យក្នុងប្រព័ន្ធ។ Excel (.xlsx) សម្រាប់ការវិភាគ និងរបាយការណ៍។' : 'JSON format is used for system backup and restoration. Excel (.xlsx) format is for reporting and data analysis.'}</p>
               </div>
             </div>
 
             {/* Reset Section */}
             <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 space-y-5 shadow-xs">
               <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-4">
-                <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/20 flex items-center justify-center">
-                  <Trash2 className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-                </div>
+                <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/20 flex items-center justify-center"><Trash2 className="w-5 h-5 text-rose-600 dark:text-rose-400" /></div>
                 <div>
-                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">
-                    {language === 'KH' ? 'កំណត់ឡើងវិញ និងសម្អាតទិន្នន័យ' : 'Reset Data'}
-                  </h3>
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">{language === 'KH' ? 'កំណត់ឡើងវិញ និងសម្អាតទិន្នន័យ' : 'Reset Data'}</h3>
                   <p className="text-xs text-slate-400 mt-0.5">{t.dmResetDesc}</p>
                 </div>
               </div>
-
               <div className="space-y-3">
-                <button
-                  onClick={handleResetDatabase}
-                  className="w-full py-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-sm"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  {t.dmRestoreSeed}
-                </button>
-                <button
-                  onClick={handleClearAllData}
-                  className="w-full py-3 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/30 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/40 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  {t.dmWipeAll}
-                </button>
+                <button onClick={handleResetDatabase} className="w-full py-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-sm"><RefreshCw className="w-4 h-4" />{t.dmRestoreSeed}</button>
+                <button onClick={handleClearAllData} className="w-full py-3 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/30 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/40 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2"><Trash2 className="w-4 h-4" />{t.dmWipeAll}</button>
               </div>
-
-              {/* Restore from JSON */}
               <div className="bg-slate-50 dark:bg-slate-950/40 border border-dashed border-slate-200 dark:border-slate-800/60 rounded-xl p-4 space-y-3">
-                <h4 className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Upload className="w-3.5 h-3.5 text-indigo-500" />
-                  {language === 'KH' ? 'ស្តារពី JSON Backup' : 'Restore from JSON Backup'}
-                </h4>
+                <h4 className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5"><Upload className="w-3.5 h-3.5 text-indigo-500" />{language === 'KH' ? 'ស្តារពី JSON Backup' : 'Restore from JSON Backup'}</h4>
                 <label className="w-full py-2.5 bg-indigo-50/50 hover:bg-indigo-100/50 dark:bg-indigo-950/20 dark:hover:bg-indigo-950/30 border border-dashed border-indigo-200 dark:border-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-xs font-black rounded-lg cursor-pointer transition-colors flex flex-col items-center justify-center gap-1">
-                  <Upload className="w-4 h-4 animate-bounce" />
-                  <span>{t.dmRestoreJson}</span>
-                  <input
-                    type="file"
-                    accept=".json"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) handleRestoreJSON(file);
-                      e.target.value = '';
-                    }}
-                    className="hidden"
-                  />
+                  <Upload className="w-4 h-4 animate-bounce" /><span>{t.dmRestoreJson}</span>
+                  <input type="file" accept=".json" onChange={(e) => { const file = e.target.files?.[0]; if (file) handleRestoreJSON(file); e.target.value = ''; }} className="hidden" />
                 </label>
               </div>
-
               <div className="bg-amber-50 dark:bg-amber-950/10 border border-amber-200/50 dark:border-amber-900/20 rounded-xl p-4">
-                <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed font-semibold">
-                  {language === 'KH' 
-                    ? '⚠️ ការព្រមាន៖ សកម្មភាពនៃការលុបទិន្នន័យទាំងអស់ ឬស្ដារឡើងវិញមិនអាចត្រឡប់ក្រោយបានទេ។ សូមប្រាកដថាអ្នកបានរក្សាទុក Backup មុននឹងប្រតិបត្តិការណ៍។'
-                    : '⚠️ Warning: Data wipe and restore actions are irreversible. Please ensure you have exported a backup before performing these operations.'}
-                </p>
+                <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed font-semibold">{language === 'KH' ? '⚠️ ការព្រមាន៖ សកម្មភាពនៃការលុបទិន្នន័យទាំងអស់ ឬស្ដារឡើងវិញមិនអាចត្រឡប់ក្រោយបានទេ។ សូមប្រាកដថាអ្នកបានរក្សាទុក Backup មុននឹងប្រតិបត្តិការណ៍។' : '⚠️ Warning: Data wipe and restore actions are irreversible. Please ensure you have exported a backup before performing these operations.'}</p>
               </div>
             </div>
-
           </div>
-
         </div>
       )}
 
-    </div>
+        </div>
 
         {/* Status Bar / Footer */}
-        <footer className="h-10 bg-white dark:bg-[#0D1527] border-t border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-6 text-xs text-slate-500 font-bold uppercase tracking-wider">
+        <footer className="h-10 bg-white dark:bg-[#0D1527] border-t border-slate-200 dark:border-slate-800 px-4 sm:px-8 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-4 sm:gap-6 text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              SECURE SHA-256 VAULT ACTIVE
+              <span className="hidden sm:inline">SECURE SHA-256 VAULT ACTIVE</span>
+              <span className="sm:hidden">SECURE</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               ALL ENCRYPTED TRANSACTIONS REGISTERED
             </div>
           </div>
-          <div className="text-xs text-slate-400">
-            System v3.0.0
+          <div className="text-[10px] sm:text-xs text-slate-400">
+            v3.0.0
           </div>
         </footer>
 
@@ -1649,7 +1903,7 @@ export default function App() {
         <RecordForm
           onAddRecord={handleAddRecord}
           onClose={() => setShowAddForm(false)}
-          currentUserName={currentRole === 'Super Admin' ? 'Director Sophia' : currentRole === 'Admin / Manager' ? 'Manager Sokha' : 'Staff Sam'}
+          currentUserName={currentUserName}
           language={language}
         />
       )}
@@ -1659,7 +1913,7 @@ export default function App() {
         <RecordDetailsModal
           record={selectedRecord}
           userRole={currentRole}
-          currentUserName={currentRole === 'Super Admin' ? 'Director Sophia' : currentRole === 'Admin / Manager' ? 'Manager Sokha' : 'Staff Sam'}
+          currentUserName={currentUserName}
           onUpdateStatus={handleUpdateStatus}
           onClose={() => setSelectedRecord(null)}
           onUpdateRecord={handleUpdateRecord}
