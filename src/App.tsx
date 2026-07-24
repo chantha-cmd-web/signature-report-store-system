@@ -31,6 +31,7 @@ import {
   PanelLeftClose,
   PanelLeft,
   LogOut,
+  Lock,
   Settings,
   ChevronRight,
   Menu,
@@ -134,7 +135,14 @@ const TRANSLATIONS = {
     changePhoto: "Change Photo",
     accountInfo: "Account Information",
     role: "Role",
-    memberSince: "Member Since"
+    memberSince: "Member Since",
+    signOut: "Sign Out",
+    changePassword: "Change Password",
+    currentPassword: "Current Password",
+    newPassword: "New Password",
+    confirmPassword: "Confirm Password",
+    online: "Online",
+    security: "Security Settings"
   },
   KH: {
     title: "ប្រព័ន្ធលិខិតស្នាមផ្ទាល់ខ្លួន",
@@ -223,7 +231,14 @@ const TRANSLATIONS = {
     changePhoto: "ផ្លាស់ប្ដូររូបភាព",
     accountInfo: "ព័ត៌មានគណនី",
     role: "តួនាទី",
-    memberSince: "ជាសមាជិកតាំងពី"
+    memberSince: "ជាសមាជិកតាំងពី",
+    signOut: "ចាកចេញ",
+    changePassword: "ផ្លាស់ប្ដូរពាក្យសម្ងាត់",
+    currentPassword: "ពាក្យសម្ងាត់បច្ចុប្បន្ន",
+    newPassword: "ពាក្យសម្ងាត់ថ្មី",
+    confirmPassword: "បញ្ជាក់ពាក្យសម្ងាត់",
+    online: "កំពុងភ្ជាប់",
+    security: "ការកំណត់សុវត្ថិភាព"
   }
 };
 
@@ -978,25 +993,76 @@ export default function App() {
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       } ${isSidebarCollapsed ? 'lg:w-[72px]' : 'lg:w-[260px]'} w-[260px]`}>
         
-        {/* Logo / Brand Area */}
-        <div className={`p-5 flex items-center border-b border-white/5 shrink-0 ${isSidebarCollapsed ? 'justify-center' : 'gap-3'}`}>
-          <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-400 rounded-2xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-emerald-500/25 shrink-0">
-            Σ
+        {/* Profile / Brand Area */}
+        <div className={`p-4 shrink-0 ${isSidebarCollapsed ? '' : ''}`}>
+          <div
+            onClick={() => { setActiveView('profile'); setIsMobileMenuOpen(false); }}
+            className={`flex items-center rounded-2xl cursor-pointer transition-all duration-300 ease-out group hover:bg-white/[0.07] ${
+              isSidebarCollapsed ? 'justify-center p-2' : 'gap-3 p-3'
+            }`}
+            title={isSidebarCollapsed ? currentUserName : undefined}
+          >
+            {/* Profile Avatar */}
+            <div className="relative shrink-0">
+              <div className="w-10 h-10 rounded-2xl overflow-hidden shadow-lg shadow-emerald-500/15 ring-2 ring-emerald-500/20 group-hover:ring-emerald-400/40 transition-all duration-300">
+                {profilePhoto ? (
+                  <img
+                    src={profilePhoto}
+                    alt={currentUserName}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-400 flex items-center justify-center text-white text-sm font-black shadow-inner">
+                    {profileInitials}
+                  </div>
+                )}
+              </div>
+              {/* Online Status Dot */}
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#0B1120] dark:border-[#050810] animate-pulse shadow-sm shadow-emerald-400/50"></div>
+            </div>
+
+            {/* User Info */}
+            {!isSidebarCollapsed && (
+              <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[13px] font-bold text-white/95 truncate group-hover:text-white transition-colors">{currentUserName}</span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 shrink-0"></span>
+                  <span className="text-[10px] font-extrabold text-emerald-400/70 uppercase tracking-[0.12em] truncate">{t.online}</span>
+                  <span className="text-[10px] text-slate-500 mx-0.5">·</span>
+                  <span className="text-[10px] font-bold text-slate-500/80 truncate">{currentRole}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Close button on mobile */}
+            {!isSidebarCollapsed && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setIsMobileMenuOpen(false); }}
+                className="lg:hidden p-1.5 rounded-lg hover:bg-white/10 text-slate-500 hover:text-white transition-all cursor-pointer shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
+
+          {/* SignStore AI Badge (only when expanded) */}
           {!isSidebarCollapsed && (
-            <div className="flex flex-col overflow-hidden">
-              <span className="text-white font-black tracking-tight text-lg font-display leading-tight">SignStore AI</span>
-              <span className="text-[10px] text-emerald-400/80 font-extrabold uppercase tracking-[0.2em] leading-tight">{t.complianceBadge}</span>
+            <div className="mt-3 mx-1 flex items-center gap-2 py-2 px-3 rounded-xl bg-white/[0.03] border border-white/[0.04] group-hover:bg-white/[0.05] transition-all duration-300">
+              <div className="w-6 h-6 bg-gradient-to-br from-emerald-400/80 via-teal-500/80 to-cyan-400/80 rounded-lg flex items-center justify-center text-white text-[10px] font-black shadow-sm shadow-emerald-500/10 shrink-0">
+                Σ
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[11px] font-bold text-white/70 tracking-tight leading-tight font-display">SignStore AI</span>
+                <span className="text-[9px] text-emerald-400/50 font-extrabold uppercase tracking-[0.15em] leading-tight">{t.complianceBadge}</span>
+              </div>
             </div>
           )}
-          {/* Close button on mobile */}
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="lg:hidden ml-auto p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
         </div>
+
+        <div className="mx-4 border-t border-white/5"></div>
 
         {/* Navigation Menu */}
         <div className="flex-1 py-4 overflow-y-auto overflow-x-hidden">
@@ -1071,26 +1137,24 @@ export default function App() {
               </button>
             )}
 
-            {/* Profile — Admin Only */}
-            {isAdmin && (
-              <button
-                onClick={() => { setActiveView('profile'); setIsMobileMenuOpen(false); }}
-                title={isSidebarCollapsed ? t.profile : undefined}
-                className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
-                  isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
-                } ${
-                  activeView === 'profile'
-                    ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/5 text-emerald-400 shadow-sm shadow-emerald-500/5'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <User className={`w-[18px] h-[18px] shrink-0 ${activeView === 'profile' ? 'text-emerald-400' : ''}`} />
-                {!isSidebarCollapsed && <span>{t.profile}</span>}
-                {activeView === 'profile' && !isSidebarCollapsed && (
-                  <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
-                )}
-              </button>
-            )}
+            {/* Profile */}
+            <button
+              onClick={() => { setActiveView('profile'); setIsMobileMenuOpen(false); }}
+              title={isSidebarCollapsed ? t.profile : undefined}
+              className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
+                isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+              } ${
+                activeView === 'profile'
+                  ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/5 text-emerald-400 shadow-sm shadow-emerald-500/5'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <User className={`w-[18px] h-[18px] shrink-0 ${activeView === 'profile' ? 'text-emerald-400' : ''}`} />
+              {!isSidebarCollapsed && <span>{t.profile}</span>}
+              {activeView === 'profile' && !isSidebarCollapsed && (
+                <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
+              )}
+            </button>
 
             {/* Divider */}
             <div className="my-3 border-t border-white/5 mx-2"></div>
@@ -1119,36 +1183,6 @@ export default function App() {
             {isSidebarCollapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
             {!isSidebarCollapsed && <span className="uppercase tracking-wider">Collapse</span>}
           </button>
-        </div>
-
-        {/* User Profile Section */}
-        <div className={`p-4 border-t border-white/5 shrink-0 ${isSidebarCollapsed ? 'px-2' : ''}`}>
-          <div
-            onClick={() => { setActiveView('profile'); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 cursor-pointer transition-all duration-200 hover:bg-white/5 group ${isSidebarCollapsed ? 'justify-center' : ''}`}
-            title={isSidebarCollapsed ? currentUserName : undefined}
-          >
-            <div className="w-8 h-8 rounded-xl overflow-hidden shrink-0 shadow-md shadow-emerald-500/10 border border-white/10">
-              {profilePhoto ? (
-                <img
-                  src={profilePhoto}
-                  alt={currentUserName}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center text-white text-[10px] font-black">
-                  {profileInitials}
-                </div>
-              )}
-            </div>
-            {!isSidebarCollapsed && (
-              <div className="flex flex-col overflow-hidden min-w-0">
-                <span className="text-xs font-bold text-white/90 truncate">{currentUserName}</span>
-                <span className="text-[10px] text-emerald-400/60 font-extrabold uppercase tracking-wider truncate">{currentRole}</span>
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Footer Status */}
@@ -1687,7 +1721,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
-                {t.adminOnly}
+                {t.online}
               </span>
             </div>
           </div>
@@ -1794,6 +1828,85 @@ export default function App() {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Security & Actions Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            {/* Change Password Card */}
+            <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/20 flex items-center justify-center">
+                  <Lock className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">{t.changePassword}</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">{language === 'KH' ? 'ផ្លាស់ប្ដូរពាក្យសម្ងាត់គណនីរបស់អ្នក។' : 'Update your account password.'}</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t.currentPassword}</label>
+                  <input type="password" placeholder="••••••••" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t.newPassword}</label>
+                  <input type="password" placeholder="••••••••" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t.confirmPassword}</label>
+                  <input type="password" placeholder="••••••••" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all" />
+                </div>
+                <button
+                  onClick={() => triggerToast(language === 'KH' ? 'ពាក្យសម្ងាត់បានផ្លាស់ប្ដូរដោយជោគជ័យ!' : 'Password changed successfully!')}
+                  className="w-full py-2.5 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/20 dark:hover:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2"
+                >
+                  <Lock className="w-4 h-4" />{t.changePassword}
+                </button>
+              </div>
+            </div>
+
+            {/* Sign Out & Session Card */}
+            <div className="bg-white dark:bg-[#0D1527] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-xs flex flex-col">
+              <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/20 flex items-center justify-center">
+                  <LogOut className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg font-display">{language === 'KH' ? 'សកម្មភាពគណនី' : 'Account Actions'}</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">{language === 'KH' ? 'គ្រប់គ្រងសម័យ និងសុវត្ថិភាពគណនីរបស់អ្នក។' : 'Manage your session and account security.'}</p>
+                </div>
+              </div>
+              <div className="flex-1 flex flex-col justify-between mt-5 space-y-4">
+                {/* Session Info */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{language === 'KH' ? 'សម័យបច្ចុប្បន្ន' : 'Current Session'}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{t.online}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{language === 'KH' ? 'ឧបករណ៍' : 'Device'}</span>
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{language === 'KH' ? 'បច្ចុប្បន្ន' : 'Current'}</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{language === 'KH' ? 'ពេលវេលាចូល' : 'Login Time'}</span>
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                  </div>
+                </div>
+
+                {/* Sign Out Button */}
+                <button
+                  onClick={() => { triggerToast(language === 'KH' ? 'អ្នកបានចាកចេញដោយជោគជ័យ។' : 'Successfully signed out.'); setActiveView('dashboard'); }}
+                  className="w-full py-3 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />{t.signOut}
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       ) : (
