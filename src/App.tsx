@@ -675,11 +675,20 @@ export default function App() {
     setIsEditingProfile(true);
   };
 
+  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'] as const;
+  const MAX_PHOTO_SIZE = 2 * 1024 * 1024;
+
   const handleProfilePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      triggerToast('Photo must be under 2MB.');
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type as typeof ALLOWED_IMAGE_TYPES[number])) {
+      triggerToast(language === 'KH' ? 'រូបភាពត្រូវតែជា JPG, JPEG, PNG ឬ WebP។' : 'Image must be JPG, JPEG, PNG, or WebP.');
+      e.target.value = '';
+      return;
+    }
+    if (file.size > MAX_PHOTO_SIZE) {
+      triggerToast(language === 'KH' ? 'រូបភាពត្រូវតែតិចជាង 2MB។' : 'Photo must be under 2MB.');
+      e.target.value = '';
       return;
     }
     const reader = new FileReader();
@@ -691,6 +700,7 @@ export default function App() {
 
   const handleRemoveProfilePhoto = () => {
     setProfilePhotoDraft(null);
+    localStorage.removeItem('profile_photo');
   };
 
   // Create new record handler
@@ -1109,6 +1119,36 @@ export default function App() {
             {isSidebarCollapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
             {!isSidebarCollapsed && <span className="uppercase tracking-wider">Collapse</span>}
           </button>
+        </div>
+
+        {/* User Profile Section */}
+        <div className={`p-4 border-t border-white/5 shrink-0 ${isSidebarCollapsed ? 'px-2' : ''}`}>
+          <div
+            onClick={() => { setActiveView('profile'); setIsMobileMenuOpen(false); }}
+            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 cursor-pointer transition-all duration-200 hover:bg-white/5 group ${isSidebarCollapsed ? 'justify-center' : ''}`}
+            title={isSidebarCollapsed ? currentUserName : undefined}
+          >
+            <div className="w-8 h-8 rounded-xl overflow-hidden shrink-0 shadow-md shadow-emerald-500/10 border border-white/10">
+              {profilePhoto ? (
+                <img
+                  src={profilePhoto}
+                  alt={currentUserName}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center text-white text-[10px] font-black">
+                  {profileInitials}
+                </div>
+              )}
+            </div>
+            {!isSidebarCollapsed && (
+              <div className="flex flex-col overflow-hidden min-w-0">
+                <span className="text-xs font-bold text-white/90 truncate">{currentUserName}</span>
+                <span className="text-[10px] text-emerald-400/60 font-extrabold uppercase tracking-wider truncate">{currentRole}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Footer Status */}
@@ -1677,7 +1717,7 @@ export default function App() {
                     <label className="w-full py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 dark:hover:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2">
                       <Camera className="w-4 h-4" />
                       {t.changePhoto}
-                      <input type="file" accept="image/*" onChange={handleProfilePhotoUpload} className="hidden" />
+                      <input type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onChange={handleProfilePhotoUpload} className="hidden" />
                     </label>
                     {profilePhotoDraft && (
                       <button onClick={handleRemoveProfilePhoto} className="w-full py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2">
@@ -1690,7 +1730,7 @@ export default function App() {
                   <label className="w-full py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-black rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700">
                     <Upload className="w-4 h-4" />
                     {t.uploadPhoto}
-                    <input type="file" accept="image/*" onChange={(e) => { handleProfilePhotoUpload(e); setIsEditingProfile(true); }} className="hidden" />
+                    <input type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onChange={(e) => { handleProfilePhotoUpload(e); setIsEditingProfile(true); }} className="hidden" />
                   </label>
                 )}
               </div>

@@ -143,3 +143,9 @@ html, body, #root {
   overflow-x: hidden;
   max-width: 100vw;
 }
+
+/* Optimized profile image rendering */
+img[alt="Profile"], img[alt] {
+  image-rendering: -webkit-optimize-contrast;
+  -webkit-backface-visibility: hidden;
+}
