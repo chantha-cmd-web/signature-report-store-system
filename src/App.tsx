@@ -55,7 +55,7 @@ const TRANSLATIONS = {
     signedThisMonth: "Signed This Month",
     categories: "Active Categories",
     aiAccuracy: "AI Voice Accuracy",
-    addLog: "Log Signed Document",
+    addLog: "Create Record",
     searchPlaceholder: "Search document name, category, department or Reference No...",
     recordId: "Record ID",
     documentName: "Document Name",
@@ -102,7 +102,7 @@ const TRANSLATIONS = {
     profileTitle: "Simulated Session Persona",
     mainMenu: "Main Menu",
     dashboard: "Dashboard Overview",
-    reports: "Reports & Insights",
+    reports: "Signed Report",
     ledgerTitle: "Personal Signed Document History Ledger",
     ledgerSubtitle: "Verify, search, and retrieve all documents you have signed. Fully audited and voice-verified.",
     resetSuccess: "Successfully restored default seed signature records!",
@@ -151,7 +151,7 @@ const TRANSLATIONS = {
     signedThisMonth: "បានចុះហត្ថលេខាខែនេះ",
     categories: "ប្រភេទឯកសារសកម្ម",
     aiAccuracy: "ភាពត្រឹមត្រូវនៃសំឡេង AI",
-    addLog: "កត់ត្រាឯកសារចុះហត្ថលេខា",
+    addLog: "បង្កើតកំណត់ត្រា",
     searchPlaceholder: "ស្វែងរកឈ្មោះឯកសារ ប្រភេទឯកសារ នាយកដ្ឋាន ឬលេខយោង...",
     recordId: "លេខសម្គាល់លិខិត",
     documentName: "ឈ្មោះឯកសារ",
@@ -198,7 +198,7 @@ const TRANSLATIONS = {
     profileTitle: "គណនីចុះហត្ថលេខាគំរូ",
     mainMenu: "ម៉ឺនុយចម្បង",
     dashboard: "ផ្ទាំងគ្រប់គ្រងទូទៅ",
-    reports: "របាយការណ៍សង្ខេប",
+    reports: "របាយការណ៍ចុះហត្ថលេខា",
     ledgerTitle: "សៀវភៅបញ្ជីប្រវត្តិឯកសារចុះហត្ថលេខាផ្ទាល់ខ្លួន",
     ledgerSubtitle: "ផ្ទៀងផ្ទាត់ ស្វែងរក និងទាញយកឯកសារទាំងអស់ដែលអ្នកបានចុះហត្ថលេខា។ មានសុវត្ថិភាព និងផ្ទៀងផ្ទាត់ដោយសំឡេង។",
     resetSuccess: "បានកំណត់ឡើងវិញនូវកំណត់ត្រាគំរូដោយជោគជ័យ!",
@@ -1084,7 +1084,19 @@ export default function App() {
               )}
             </button>
 
-            {/* Reports */}
+            {/* Create Record */}
+            <button
+              onClick={() => { setShowAddForm(true); setIsMobileMenuOpen(false); }}
+              title={isSidebarCollapsed ? t.addLog : undefined}
+              className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 mb-0.5 ${
+                isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+              } text-slate-400 hover:text-white hover:bg-white/5`}
+            >
+              <Plus className="w-[18px] h-[18px] shrink-0" />
+              {!isSidebarCollapsed && <span>{t.addLog}</span>}
+            </button>
+
+            {/* Signed Report */}
             <button
               onClick={() => { setActiveView('reports'); setIsMobileMenuOpen(false); }}
               title={isSidebarCollapsed ? t.reports : undefined}
@@ -1141,21 +1153,6 @@ export default function App() {
               {activeView === 'profile' && !isSidebarCollapsed && (
                 <ChevronRight className="w-3.5 h-3.5 ml-auto text-emerald-400/60" />
               )}
-            </button>
-
-            {/* Divider */}
-            <div className="my-3 border-t border-white/5 mx-2"></div>
-
-            {/* Log Signed Document */}
-            <button
-              onClick={() => { setShowAddForm(true); setIsMobileMenuOpen(false); }}
-              title={isSidebarCollapsed ? t.addLog : undefined}
-              className={`w-full flex items-center gap-3 rounded-xl font-semibold text-[13px] cursor-pointer transition-all duration-200 ${
-                isSidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
-              } text-slate-400 hover:text-white hover:bg-white/5`}
-            >
-              <Plus className="w-[18px] h-[18px] shrink-0" />
-              {!isSidebarCollapsed && <span>{t.addLog}</span>}
             </button>
           </div>
         </div>
